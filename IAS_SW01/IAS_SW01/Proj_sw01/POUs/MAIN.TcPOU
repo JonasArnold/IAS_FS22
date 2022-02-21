@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="MAIN" Id="{260d71a0-0831-43e2-af30-09a834cbf7a1}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	count 				: INT := 0;
+	i_CounterFun 		: INT := 0;
+	i_CounterFunBlock	: INT := 0;
+	
+	fb_Count_obj1 		: Fb_Counter;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// count := count + 1;
+
+// count up with counter function
+i_CounterFun := Fun_Counter(i_CounterFun); 
+
+
+
+// count up with counter function block
+fb_Count_obj1();   // call function block
+i_CounterFunBlock := fb_Count_obj1.i_countOut;   // access variables]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="2" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="14" Count="2" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="17" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

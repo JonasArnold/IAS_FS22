@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="Fun_Counter" Id="{6a0e17bb-5c4b-477e-925e-b889edc4f185}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION Fun_Counter : INT
+VAR_INPUT
+	i_count_in 			: INT; 
+END_VAR
+VAR
+	i_countUp 			: INT := 1;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Fun_Counter := i_count_in + i_countUp; 
+]]></ST>
+    </Implementation>
+    <LineIds Name="Fun_Counter">
+      <LineId Id="7" Count="0" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
