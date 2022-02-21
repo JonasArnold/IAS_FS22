@@ -3,12 +3,19 @@
   <POU Name="Prg_Counter" Id="{56949bcf-47d4-4045-9858-74c2a0ec070a}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM Prg_Counter
 VAR
+	i_counter_save			: INT;
+	i_countUp				: INT := 1;
+END_VAR
+VAR_OUTPUT
+	i_countOut			: INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[i_counter_save := i_counter_save + i_countUp;
+i_countOut := i_counter_save;]]></ST>
     </Implementation>
     <LineIds Name="Prg_Counter">
+      <LineId Id="6" Count="0" />
       <LineId Id="5" Count="0" />
     </LineIds>
   </POU>

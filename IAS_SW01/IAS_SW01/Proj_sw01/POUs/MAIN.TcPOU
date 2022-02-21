@@ -6,6 +6,7 @@ VAR
 	count 				: INT := 0;
 	i_CounterFun 		: INT := 0;
 	i_CounterFunBlock	: INT := 0;
+	i_CounterProgram	: INT := 0;
 	
 	fb_Count_obj1 		: Fb_Counter;
 END_VAR
@@ -20,7 +21,16 @@ i_CounterFun := Fun_Counter(i_CounterFun);
 
 // count up with counter function block
 fb_Count_obj1();   // call function block
-i_CounterFunBlock := fb_Count_obj1.i_countOut;   // access variables]]></ST>
+i_CounterFunBlock := fb_Count_obj1.i_countOut;   // access variables
+
+
+
+// count up using a program
+Prg_Counter(i_countOut => i_CounterProgram);
+
+
+// access global variable list
+GVL_IO.input1;]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
       <LineId Id="2" Count="0" />
@@ -31,6 +41,11 @@ i_CounterFunBlock := fb_Count_obj1.i_countOut;   // access variables]]></ST>
       <LineId Id="13" Count="0" />
       <LineId Id="22" Count="0" />
       <LineId Id="17" Count="0" />
+      <LineId Id="24" Count="2" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="32" Count="2" />
+      <LineId Id="27" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
