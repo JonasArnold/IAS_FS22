@@ -2,38 +2,49 @@
   <PropertyGroup>
     <FileVersion>1.0.0.0</FileVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{e1d0070e-5b3b-4157-a5c3-97fc3907d08d}</ProjectGuid>
+    <ProjectGuid>{db29d076-bd91-498a-a24e-12355f59e26f}</ProjectGuid>
     <SubObjectsSortedByName>True</SubObjectsSortedByName>
     <DownloadApplicationInfo>true</DownloadApplicationInfo>
     <WriteProductVersion>true</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
-    <Name>Proj_sw01</Name>
+    <Name>Proj_Ueb_sw01</Name>
     <ProgramVersion>3.1.4023.0</ProgramVersion>
-    <Application>{ac8cb741-d8c5-4d8e-83cb-3f7e40ada46f}</Application>
-    <TypeSystem>{0d0a13e1-ba1f-47f6-bd1e-b69cd6785b15}</TypeSystem>
-    <Implicit_Task_Info>{3c4aa14e-ae22-4f94-aba9-ad5797714d2e}</Implicit_Task_Info>
-    <Implicit_KindOfTask>{2f2a1cd8-221d-447e-a37a-818343fc4664}</Implicit_KindOfTask>
-    <Implicit_Jitter_Distribution>{9c53c41f-1a7c-4e7c-896d-0bb6e0e84f01}</Implicit_Jitter_Distribution>
-    <LibraryReferences>{06c98443-bc27-45ff-8905-ca867cdee4ca}</LibraryReferences>
+    <Application>{4bae6d2d-62b1-4165-a8a0-56412b01ccb6}</Application>
+    <TypeSystem>{c12f267c-0f55-403e-96ce-37415b885134}</TypeSystem>
+    <Implicit_Task_Info>{947183e6-29f2-4aa5-9ef7-08a2113931cb}</Implicit_Task_Info>
+    <Implicit_KindOfTask>{d838ce82-6d42-4818-a2ba-dc120092bb2a}</Implicit_KindOfTask>
+    <Implicit_Jitter_Distribution>{2cc2c371-0f43-4f97-95e7-0d7d17805682}</Implicit_Jitter_Distribution>
+    <LibraryReferences>{24d28a62-22ed-49b2-a7e4-df67eaee6301}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="GVLs\GVL_IO.TcGVL">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Fb_Counter.TcPOU">
+    <Compile Include="POUs\AdditionFunction.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Fun_Counter.TcPOU">
+    <Compile Include="POUs\FUN_Add.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FUN_Addition.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FUN_Divide.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FUN_Multiply.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FUN_Substract.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Prg_Counter.TcPOU">
+    <Compile Include="POUs\POU.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\PRG_DoSomeMath.TcPOU">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -58,15 +69,15 @@
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Proj_sw01.tmc">
+    <None Include="Proj_Ueb_sw01.tmc">
       <SubType>Content</SubType>
     </None>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-  <Data>
-    <o xml:space="preserve" t="OptionKey">
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
@@ -93,13 +104,13 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-  </Data>
-  <TypeList>
-    <Type n="Hashtable">System.Collections.Hashtable</Type>
-    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-    <Type n="String">System.String</Type>
-  </TypeList>
-</XmlArchive>
+        </Data>
+        <TypeList>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
 </Project>

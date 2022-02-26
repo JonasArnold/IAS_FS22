@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FUN_Add" Id="{da39f6b9-865b-4010-9a48-451276c105d7}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION FUN_Add : REAL
+VAR_INPUT
+		f_Inp1			: REAL;
+		f_Inp2			: REAL;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[FUN_Add := f_Inp1 + f_Inp2;]]></ST>
+    </Implementation>
+    <LineIds Name="FUN_Add">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FUN_Multiply" Id="{ff1e60a7-4b2d-4678-8394-8407f996530f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION FUN_Multiply : REAL
+VAR_INPUT
+		f_Inp1			: REAL;
+		f_Inp2			: REAL;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[FUN_Multiply := f_Inp1 * f_Inp2;]]></ST>
+    </Implementation>
+    <LineIds Name="FUN_Multiply">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FUN_Divide" Id="{05de8517-1653-41fa-9889-45f8b3cb3ada}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION FUN_Divide : REAL
+VAR_INPUT
+		f_Inp1			: REAL;
+		f_Inp2			: REAL;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF(f_Inp2 = 0) THEN
+	FUN_Divide := 0;
+ELSE
+	FUN_Divide := f_Inp1 / f_Inp2;
+END_IF
+]]></ST>
+    </Implementation>
+    <LineIds Name="FUN_Divide">
+      <LineId Id="7" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="14" Count="1" />
+      <LineId Id="12" Count="1" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
