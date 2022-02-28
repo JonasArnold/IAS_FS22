@@ -33,7 +33,7 @@
 				</Instance>
 			</Project>
 			<Project GUID="{DB29D076-BD91-498A-A24E-12355F59E26F}" Name="Proj_Ueb_sw01" PrjFilePath="Proj_Ueb_sw01\Proj_Ueb_sw01.plcproj" TmcFilePath="Proj_Ueb_sw01\Proj_Ueb_sw01.tmc" ReloadTmc="true" AmsPort="852" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502040" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2">
+				<Instance Id="#x08502040" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Proj_Ueb_sw01\Proj_Ueb_sw01.tmc">
 					<Name>Proj_Ueb_sw01 Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>
