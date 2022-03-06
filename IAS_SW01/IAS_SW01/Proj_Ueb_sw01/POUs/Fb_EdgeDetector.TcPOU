@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="Fb_EdgeDetector" Id="{d746b410-be40-4fa8-9299-53feae6bfcc6}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL Fb_EdgeDetector
+VAR_INPUT
+	inputValue		: BOOL;
+END_VAR
+VAR_OUTPUT
+	risingEdge		: BOOL;
+	fallingEdge		: BOOL;
+END_VAR
+VAR
+	lastValue 		: BOOL;
+	tAcceptNewVals	: TIME := TIME();  // initialize with now
+	tDelayValue     : TIME := T#10MS;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// if a change happened and new values get accepted
+IF(inputValue <> lastValue AND tAcceptNewVals > TIME()) THEN
+	IF(inputValue = TRUE) THEN
+		risingEdge := TRUE;
+		fallingEdge := FALSE;
+	ELSE
+		risingEdge := FALSE;
+		fallingEdge := TRUE;
+	END_IF
+	lastValue := inputValue;  // overwrite stored value
+	tAcceptNewVals := TIME() + tDelayValue;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="Fb_EdgeDetector">
+      <LineId Id="16" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="19" Count="1" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="15" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

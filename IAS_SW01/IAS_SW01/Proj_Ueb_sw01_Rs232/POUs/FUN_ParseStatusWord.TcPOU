@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FUN_ParseStatusWord" Id="{5b121ded-74c1-4d1d-b36a-79e2fa16586d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION FUN_ParseStatusWord : BOOL
+VAR_INPUT
+	w_Status			: WORD;
+END_VAR
+VAR
+	inLength			: INT;
+	overrunError		: BOOL;
+	framingError		: BOOL;
+	parityError 		: BOOL;
+	bufferFull			: BOOL;
+	initAccepted		: BOOL;
+	recieveAccepted		: BOOL;
+	transmitAccepted	: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// extract data : shift to right and convert to Integer
+inLength := WORD_TO_INT( SHR(w_Status, 8) );
+
+// extract flag bits
+overrunError 		:= (w_Status AND 2#1000000) > 0;	
+framingError 		:= (w_Status AND 2#0100000) > 0;	
+parityError 		:= (w_Status AND 2#0010000) > 0;	
+bufferFull 			:= (w_Status AND 2#0001000) > 0;	
+initAccepted		:= (w_Status AND 2#0000100) > 0;	
+recieveAccepted 	:= (w_Status AND 2#0000010) > 0;	
+transmitAccepted	:= (w_Status AND 2#0000001) > 0;	
+
+FUN_ParseStatusWord := TRUE;]]></ST>
+    </Implementation>
+    <LineIds Name="FUN_ParseStatusWord">
+      <LineId Id="32" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="14" Count="1" />
+      <LineId Id="34" Count="1" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="10" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

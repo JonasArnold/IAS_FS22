@@ -2,43 +2,28 @@
   <PropertyGroup>
     <FileVersion>1.0.0.0</FileVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{db29d076-bd91-498a-a24e-12355f59e26f}</ProjectGuid>
+    <ProjectGuid>{d0055af9-b74c-4b65-a96a-f93e1674d484}</ProjectGuid>
     <SubObjectsSortedByName>True</SubObjectsSortedByName>
     <DownloadApplicationInfo>true</DownloadApplicationInfo>
     <WriteProductVersion>true</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
-    <Name>Proj_Ueb_sw01</Name>
+    <Name>Proj_Ueb_sw01_Rs232</Name>
     <ProgramVersion>3.1.4023.0</ProgramVersion>
-    <Application>{4bae6d2d-62b1-4165-a8a0-56412b01ccb6}</Application>
-    <TypeSystem>{c12f267c-0f55-403e-96ce-37415b885134}</TypeSystem>
-    <Implicit_Task_Info>{947183e6-29f2-4aa5-9ef7-08a2113931cb}</Implicit_Task_Info>
-    <Implicit_KindOfTask>{d838ce82-6d42-4818-a2ba-dc120092bb2a}</Implicit_KindOfTask>
-    <Implicit_Jitter_Distribution>{2cc2c371-0f43-4f97-95e7-0d7d17805682}</Implicit_Jitter_Distribution>
-    <LibraryReferences>{24d28a62-22ed-49b2-a7e4-df67eaee6301}</LibraryReferences>
+    <Application>{5930fc34-9913-4e6b-a56f-abd2097dd7bd}</Application>
+    <TypeSystem>{0ea5574f-0766-4793-8804-854b3a81bbfd}</TypeSystem>
+    <Implicit_Task_Info>{49392611-ecb0-467e-b6e1-e13a5efab0c0}</Implicit_Task_Info>
+    <Implicit_KindOfTask>{f0050c16-bb2f-4500-84fb-8b22202b1650}</Implicit_KindOfTask>
+    <Implicit_Jitter_Distribution>{9df3767f-cf5f-40b9-9e44-4ed9728f890a}</Implicit_Jitter_Distribution>
+    <LibraryReferences>{dd9b4c4c-5401-43af-88ed-f3bae4460600}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Fb_EdgeDetector.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\FUN_Add.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\FUN_Divide.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\FUN_Multiply.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\FUN_Substract.TcPOU">
+    <Compile Include="POUs\FUN_ParseStatusWord.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\PRG_DoSomeMath.TcPOU">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -63,15 +48,15 @@
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Proj_Ueb_sw01.tmc">
+    <None Include="Proj_Ueb_sw01_Rs232.tmc">
       <SubType>Content</SubType>
     </None>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-        <Data>
-          <o xml:space="preserve" t="OptionKey">
+  <Data>
+    <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
@@ -98,13 +83,13 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-        </Data>
-        <TypeList>
-          <Type n="Hashtable">System.Collections.Hashtable</Type>
-          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-          <Type n="String">System.String</Type>
-        </TypeList>
-      </XmlArchive>
+  </Data>
+  <TypeList>
+    <Type n="Hashtable">System.Collections.Hashtable</Type>
+    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+    <Type n="String">System.String</Type>
+  </TypeList>
+</XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
 </Project>
