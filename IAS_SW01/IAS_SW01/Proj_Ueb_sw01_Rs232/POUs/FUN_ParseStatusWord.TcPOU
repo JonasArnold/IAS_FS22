@@ -1,35 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
   <POU Name="FUN_ParseStatusWord" Id="{5b121ded-74c1-4d1d-b36a-79e2fa16586d}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION FUN_ParseStatusWord : BOOL
+    <Declaration><![CDATA[FUNCTION FUN_ParseStatusWord : St_RS232Word
 VAR_INPUT
 	w_Status			: WORD;
 END_VAR
 VAR
-	inLength			: INT;
-	overrunError		: BOOL;
-	framingError		: BOOL;
-	parityError 		: BOOL;
-	bufferFull			: BOOL;
-	initAccepted		: BOOL;
-	recieveAccepted		: BOOL;
-	transmitAccepted	: BOOL;
+	parsedWord			: St_RS232Word;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[// extract data : shift to right and convert to Integer
-inLength := WORD_TO_INT( SHR(w_Status, 8) );
+parsedWord.inLength := WORD_TO_INT( SHR(w_Status, 8) );
 
 // extract flag bits
-overrunError 		:= (w_Status AND 2#1000000) > 0;	
-framingError 		:= (w_Status AND 2#0100000) > 0;	
-parityError 		:= (w_Status AND 2#0010000) > 0;	
-bufferFull 			:= (w_Status AND 2#0001000) > 0;	
-initAccepted		:= (w_Status AND 2#0000100) > 0;	
-recieveAccepted 	:= (w_Status AND 2#0000010) > 0;	
-transmitAccepted	:= (w_Status AND 2#0000001) > 0;	
+parsedWord.overrunError 		:= (w_Status AND 2#100_0000) > 0;	
+parsedWord.framingError 		:= (w_Status AND 2#010_0000) > 0;	
+parsedWord.parityError 		:= (w_Status AND 2#001_0000) > 0;	
+parsedWord.bufferFull 			:= (w_Status AND 2#000_1000) > 0;	
+parsedWord.initAccepted		:= (w_Status AND 2#000_0100) > 0;	
+parsedWord.recieveAccepted 	:= (w_Status AND 2#000_0010) > 0;	
+parsedWord.transmitAccepted	:= (w_Status AND 2#000_0001) > 0;	
 
-FUN_ParseStatusWord := TRUE;]]></ST>
+FUN_ParseStatusWord := parsedWord;]]></ST>
     </Implementation>
     <LineIds Name="FUN_ParseStatusWord">
       <LineId Id="32" Count="0" />

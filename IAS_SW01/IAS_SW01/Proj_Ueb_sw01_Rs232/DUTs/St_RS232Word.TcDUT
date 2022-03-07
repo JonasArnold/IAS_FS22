@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="St_RS232Word" Id="{6b49e83d-7a56-4fcf-bec2-1434ff660cff}">
+    <Declaration><![CDATA[TYPE St_RS232Word :
+STRUCT
+	inLength			: INT;
+	overrunError		: BOOL;
+	framingError		: BOOL;
+	parityError 		: BOOL;
+	bufferFull			: BOOL;
+	initAccepted		: BOOL;
+	recieveAccepted		: BOOL;
+	transmitAccepted	: BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
