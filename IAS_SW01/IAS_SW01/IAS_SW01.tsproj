@@ -92,6 +92,10 @@
 							<Name>GVL_IO.DI_BtnYellow</Name>
 							<Type>BOOL</Type>
 						</Var>
+						<Var>
+							<Name>GVL_IO.DI_BtnBlue</Name>
+							<Type>BOOL</Type>
+						</Var>
 					</Vars>
 					<Vars VarGrpType="2" AreaNo="1">
 						<Name>PlcTask Outputs</Name>
@@ -911,6 +915,7 @@ Bit1: Value bigger/equal Limit2]]></Comment>
 		<MappingInfo Identifier="{00000000-2041-0850-4020-500810000403}" Id="#x02030010"/>
 		<OwnerA Name="TIPC^Proj_Ueb_sw01^Proj_Ueb_sw01 Instance">
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 2 (EL1004)">
+				<Link VarA="PlcTask Inputs^GVL_IO.DI_BtnBlue" VarB="Channel 2^Input"/>
 				<Link VarA="PlcTask Inputs^GVL_IO.DI_BtnYellow" VarB="Channel 1^Input"/>
 			</OwnerB>
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 3 (EL2004)">

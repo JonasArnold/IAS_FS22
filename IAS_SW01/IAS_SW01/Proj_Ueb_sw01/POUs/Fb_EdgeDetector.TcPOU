@@ -8,39 +8,74 @@ END_VAR
 VAR_OUTPUT
 	risingEdge		: BOOL;
 	fallingEdge		: BOOL;
+	doublePress		: BOOL;
+	triplePress		: BOOL;
 END_VAR
 VAR
-	lastValue 		: BOOL;
-	tlastPush		: TIME := TIME();  // initialize with now
-	tDelayValue     : TIME := T#10MS;
+	i_risingEdgCnt			: INT := 0;  		// internal var
+	lastValue 				: BOOL;				// last value registered
+	tlastPush				: TIME := TIME();	// time when last push happened
+	tLastRising				: TIME := TIME();	// time when last rising edge happened
+	tDebounce	    		: TIME := T#20MS;   // time to debounce input value
+	tMultiPressTime			: TIME := T#200MS;	// time between which multiple presses to allow the user to press button again
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// if a change happened and new values get accepted
-IF(inputValue <> lastValue AND (tlastPush + tDelayValue) < TIME()) THEN
+      <ST><![CDATA[// reset output signals
+fallingEdge := FALSE;
+risingEdge := FALSE;
+doublePress := FALSE;
+triplePress := FALSE;
+
+// if a change happened and new values get accepted
+IF(inputValue <> lastValue AND (tlastPush + tDebounce) < TIME()) THEN
 	IF(inputValue) THEN
-		risingEdge := TRUE;
-		fallingEdge := FALSE;
+		i_risingEdgCnt := i_risingEdgCnt + 1;
+		
+		tLastRising := TIME(); // reset last rising time (give another tMultiPressTime time to press the button another time
 	ELSE
-		risingEdge := FALSE;
 		fallingEdge := TRUE;
 	END_IF
 	lastValue := inputValue;  // overwrite stored value
 	tlastPush := TIME();
-END_IF]]></ST>
+END_IF
+
+
+// handle rising edge (with double press)
+CASE i_risingEdgCnt OF
+	1:
+	IF (tLastRising + tMultiPressTime) < TIME() THEN
+		risingEdge := TRUE;
+		i_risingEdgCnt := 0;
+	END_IF
+	
+	2:
+	IF (tLastRising + tMultiPressTime) < TIME() THEN
+		doublePress := TRUE;
+		i_risingEdgCnt := 0;
+	END_IF
+	
+	3:
+	// instantly report triple press, since no more amount of multi press is output
+	triplePress := TRUE;
+	i_risingEdgCnt := 0;
+ELSE
+	;
+END_CASE]]></ST>
     </Implementation>
     <LineIds Name="Fb_EdgeDetector">
-      <LineId Id="16" Count="0" />
-      <LineId Id="9" Count="0" />
-      <LineId Id="14" Count="0" />
-      <LineId Id="17" Count="0" />
-      <LineId Id="21" Count="0" />
-      <LineId Id="19" Count="1" />
-      <LineId Id="23" Count="0" />
-      <LineId Id="18" Count="0" />
-      <LineId Id="24" Count="0" />
-      <LineId Id="27" Count="0" />
-      <LineId Id="15" Count="0" />
+      <LineId Id="231" Count="3" />
+      <LineId Id="279" Count="0" />
+      <LineId Id="235" Count="5" />
+      <LineId Id="243" Count="0" />
+      <LineId Id="245" Count="16" />
+      <LineId Id="271" Count="2" />
+      <LineId Id="270" Count="0" />
+      <LineId Id="264" Count="1" />
+      <LineId Id="274" Count="0" />
+      <LineId Id="266" Count="3" />
+      <LineId Id="134" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

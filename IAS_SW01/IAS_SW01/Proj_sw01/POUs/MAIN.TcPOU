@@ -9,6 +9,11 @@ VAR
 	i_CounterProgram	: INT := 0;
 	
 	fb_Count_obj1 		: Fb_Counter;
+	
+	timer1				: TON;
+	timerPT				: TIME := T#10.0S;
+	bTimerEnded			: BOOL := FALSE;
+	bTimerIn			: BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -30,7 +35,15 @@ Prg_Counter(i_countOut => i_CounterProgram);
 
 
 // access global variable list
-GVL_IO.input1;]]></ST>
+GVL_IO.input1;
+
+// test with timer
+timer1.IN := bTimerIn;  // pass input values
+timer1.PT := timerPT;   
+timer1();  // call fb
+IF timer1.Q THEN
+	bTimerEnded := TRUE;
+END_IF]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
       <LineId Id="2" Count="0" />
@@ -46,6 +59,11 @@ GVL_IO.input1;]]></ST>
       <LineId Id="28" Count="0" />
       <LineId Id="32" Count="2" />
       <LineId Id="27" Count="0" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="57" Count="1" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="50" Count="2" />
     </LineIds>
   </POU>
 </TcPlcObject>

@@ -1,12 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
-  <GVL Name="GVL_IO" Id="{69f73459-75c2-4af2-ba4e-a6e34bb922db}">
+  <GVL Name="GVL_CONST" Id="{e609a9ee-cdf9-4001-a1f3-11ba529f4908}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
-VAR_GLOBAL
-	DI_BtnYellow 	AT %I* : BOOL;
-	DI_BtnBlue	 	AT %I* : BOOL;
-	DO_LampRed 		AT %Q* : BOOL;
-	DO_LampGreen	AT %Q* : BOOL;
+VAR_GLOBAL CONSTANT
+	analogOutputMaxVolt		: INT := 10;
+	intMaxValue				: INT := 32767;
+	samplingTime			: TIME := T#10S;
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

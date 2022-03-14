@@ -8,7 +8,13 @@ VAR
 	f_RandomArray		: 	ARRAY[1..10] OF REAL := [5.0, 3.5, 4.6, 1.2, 13, 5.4, 5.6, 11.0, 15.6, 10];
 	f_Product			: 	REAL;
 	f_Sum 				: 	REAL;
-	edgeDetector		:   Fb_EdgeDetector;
+	edgeDetectorBtnY	:   Fb_EdgeDetector;
+	edgeDetectorBtnB	:   Fb_EdgeDetector;
+	t_ToggleTime		: 	TIME := T#333MS;	// 1/Hz = [s]
+	t_lastToggle		: 	TIME := TIME();
+	togglingMode		: 	En_ToggleMode := En_ToggleMode.Off;
+	b_LampR_On			: 	BOOL := FALSE;
+	b_LampG_On			: 	BOOL := FALSE;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -73,56 +79,107 @@ UNTIL i_Counter > 10
 END_REPEAT
 
 
-// Aufgabe 11
-edgeDetector(inputValue := GVL_IO.DI_BtnYellow);
+// Aufgabe 11 and 12
+edgeDetectorBtnY(inputValue := GVL_IO.DI_BtnYellow);
+edgeDetectorBtnB(inputValue := GVL_IO.DI_BtnBlue);
 
-GVL_IO.DO_LampRed := edgeDetector.risingEdge;
-GVL_IO.DO_LampGreen := edgeDetector.fallingEdge;]]></ST>
+// double press?
+IF edgeDetectorBtnB.doublePress OR edgeDetectorBtnY.doublePress THEN
+	t_ToggleTime := t_ToggleTime / 2;  // double frequency
+END_IF
+
+// triple press?
+IF edgeDetectorBtnB.triplePress OR edgeDetectorBtnY.triplePress THEN
+	t_ToggleTime := t_ToggleTime * 2;  // half frequency
+END_IF
+
+CASE togglingMode OF
+	
+	/// CASE OFF ///
+	En_ToggleMode.Off:
+	// lamp actions
+	b_LampR_On := FALSE;
+	b_LampG_On := FALSE;
+	t_ToggleTime := T#333MS; // reset to default time
+	
+	// switch mode
+	IF edgeDetectorBtnY.risingEdge THEN
+		togglingMode := En_ToggleMode.Simulataneous;
+	END_IF
+	IF edgeDetectorBtnB.risingEdge THEN 
+		togglingMode := En_ToggleMode.Alternating;
+		b_LampG_On := TRUE;  // initial lamp on => alternating
+	END_IF
+	
+	/// CASE Simulataneous ///
+	En_ToggleMode.Simulataneous:
+	// lamp actions
+	IF((t_lastToggle + t_ToggleTime) < TIME()) THEN
+		b_LampR_On := NOT b_LampR_On;
+		b_LampG_On := NOT b_LampG_On;
+		t_lastToggle := TIME();
+	END_IF
+	
+	// switch mode
+	IF edgeDetectorBtnY.risingEdge THEN
+		togglingMode := En_ToggleMode.Off;
+	END_IF
+	
+
+	/// CASE ALTERNATING ///
+	En_ToggleMode.Alternating:
+	// lamp actions
+	IF((t_lastToggle + t_ToggleTime) < TIME()) THEN
+		b_LampR_On := NOT b_LampR_On;
+		b_LampG_On := NOT b_LampG_On;
+		t_lastToggle := TIME();
+	END_IF
+	
+	// switch mode
+	IF edgeDetectorBtnB.risingEdge THEN
+		togglingMode := En_ToggleMode.Off;
+	END_IF
+
+	
+END_CASE
+
+
+GVL_IO.DO_LampRed := b_LampR_On;
+GVL_IO.DO_LampGreen := b_LampG_On;]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
-      <LineId Id="2" Count="0" />
-      <LineId Id="8" Count="0" />
-      <LineId Id="14" Count="1" />
-      <LineId Id="17" Count="1" />
-      <LineId Id="20" Count="0" />
-      <LineId Id="22" Count="0" />
-      <LineId Id="19" Count="0" />
-      <LineId Id="16" Count="0" />
-      <LineId Id="23" Count="2" />
-      <LineId Id="29" Count="1" />
-      <LineId Id="13" Count="0" />
-      <LineId Id="41" Count="0" />
-      <LineId Id="35" Count="0" />
-      <LineId Id="45" Count="1" />
-      <LineId Id="40" Count="0" />
-      <LineId Id="38" Count="0" />
-      <LineId Id="42" Count="0" />
-      <LineId Id="53" Count="1" />
-      <LineId Id="52" Count="0" />
-      <LineId Id="66" Count="2" />
-      <LineId Id="64" Count="0" />
-      <LineId Id="55" Count="0" />
-      <LineId Id="58" Count="0" />
-      <LineId Id="61" Count="0" />
-      <LineId Id="59" Count="0" />
-      <LineId Id="71" Count="0" />
-      <LineId Id="70" Count="0" />
-      <LineId Id="73" Count="2" />
-      <LineId Id="82" Count="0" />
-      <LineId Id="76" Count="0" />
-      <LineId Id="81" Count="0" />
-      <LineId Id="78" Count="1" />
-      <LineId Id="94" Count="0" />
-      <LineId Id="80" Count="0" />
-      <LineId Id="83" Count="9" />
-      <LineId Id="95" Count="0" />
-      <LineId Id="93" Count="0" />
-      <LineId Id="72" Count="0" />
-      <LineId Id="105" Count="1" />
-      <LineId Id="104" Count="0" />
-      <LineId Id="107" Count="0" />
-      <LineId Id="119" Count="0" />
-      <LineId Id="118" Count="0" />
+      <LineId Id="231" Count="63" />
+      <LineId Id="358" Count="0" />
+      <LineId Id="354" Count="0" />
+      <LineId Id="356" Count="1" />
+      <LineId Id="355" Count="0" />
+      <LineId Id="384" Count="3" />
+      <LineId Id="383" Count="0" />
+      <LineId Id="295" Count="2" />
+      <LineId Id="353" Count="0" />
+      <LineId Id="298" Count="0" />
+      <LineId Id="363" Count="2" />
+      <LineId Id="361" Count="1" />
+      <LineId Id="299" Count="5" />
+      <LineId Id="360" Count="0" />
+      <LineId Id="305" Count="0" />
+      <LineId Id="308" Count="0" />
+      <LineId Id="352" Count="0" />
+      <LineId Id="309" Count="0" />
+      <LineId Id="367" Count="4" />
+      <LineId Id="366" Count="0" />
+      <LineId Id="372" Count="0" />
+      <LineId Id="310" Count="4" />
+      <LineId Id="320" Count="0" />
+      <LineId Id="351" Count="0" />
+      <LineId Id="381" Count="0" />
+      <LineId Id="374" Count="4" />
+      <LineId Id="373" Count="0" />
+      <LineId Id="379" Count="1" />
+      <LineId Id="322" Count="3" />
+      <LineId Id="350" Count="0" />
+      <LineId Id="326" Count="0" />
+      <LineId Id="337" Count="2" />
       <LineId Id="129" Count="0" />
     </LineIds>
   </POU>
