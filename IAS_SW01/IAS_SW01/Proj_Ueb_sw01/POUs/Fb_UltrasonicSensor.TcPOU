@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="Fb_UltrasonicSensor" Id="{c18198f7-c06d-48df-ab56-66f4f3ccde48}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Fb_UltrasonicSensor
+VAR_INPUT
+	i_UltraSonicAnalogInput		: INT;
+	e_DistanceMode				: En_DistanceMode := En_DistanceMode.Default;
+END_VAR
+VAR_OUTPUT
+	r_VoltageUltraSonicSensor	: REAL;
+	i_AnalogOutput				: INT;
+END_VAR
+VAR
+	l_UltraSonic				: DINT;
+END_VAR
+VAR CONSTANT
+	MAX_VOLTAGE					: REAL := 10.0;
+	MAX_INT						: INT := 32767;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// multiply by max voltage
+l_UltraSonic := i_UltraSonicAnalogInput * REAL_TO_INT(MAX_VOLTAGE);
+
+// divide by resolution
+r_VoltageUltraSonicSensor := DINT_TO_REAL(l_UltraSonic) / INT_TO_REAL(MAX_INT);
+
+// check distance mode and calculate
+IF(e_DistanceMode = En_DistanceMode.NearerIsHigher) THEN
+	l_UltraSonic := MAX_INT - i_UltraSonicAnalogInput;
+ELSE
+	l_UltraSonic := i_UltraSonicAnalogInput;
+END_IF
+
+// analog output, dint wont be larger than int at this point
+i_AnalogOutput := DINT_TO_INT(l_UltraSonic);]]></ST>
+    </Implementation>
+    <LineIds Name="Fb_UltrasonicSensor">
+      <LineId Id="44" Count="3" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="40" Count="1" />
+      <LineId Id="39" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

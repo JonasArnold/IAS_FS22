@@ -8,6 +8,7 @@ VAR
 	f_RandomArray		: 	ARRAY[1..10] OF REAL := [5.0, 3.5, 4.6, 1.2, 13, 5.4, 5.6, 11.0, 15.6, 10];
 	f_Product			: 	REAL;
 	f_Sum 				: 	REAL;
+	
 	edgeDetectorBtnY	:   Fb_EdgeDetector;
 	edgeDetectorBtnB	:   Fb_EdgeDetector;
 	t_ToggleTime		: 	TIME := T#333MS;	// 1/Hz = [s]
@@ -15,6 +16,16 @@ VAR
 	togglingMode		: 	En_ToggleMode := En_ToggleMode.Off;
 	b_LampR_On			: 	BOOL := FALSE;
 	b_LampG_On			: 	BOOL := FALSE;
+	
+	ultraSonicSensorFb	:	Fb_UltrasonicSensor;
+	
+	a_lastValues		: 	ARRAY [1..NUM_STORED_VALS] OF REAL; 
+	r_meanVal			: 	REAL := 0;
+	fb_MeanCalc			: 	Fb_MeanCalculatorWForgettingFactor;
+	r_forgettingFactor	: 	REAL := 0.5;
+END_VAR
+VAR CONSTANT
+	NUM_STORED_VALS		: INT := 300;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -145,42 +156,27 @@ END_CASE
 
 
 GVL_IO.DO_LampRed := b_LampR_On;
-GVL_IO.DO_LampGreen := b_LampG_On;]]></ST>
+GVL_IO.DO_LampGreen := b_LampG_On;
+
+
+// Aufgabe 13
+ultraSonicSensorFb(	i_UltraSonicAnalogInput := GVL_IO.AI_UltraSonicSensor, 
+					e_DistanceMode := En_DistanceMode.NearerIsHigher);
+GVL_IO.AO_AnalogGauge := ultraSonicSensorFb.i_AnalogOutput;
+
+// Aufgabe 14
+FUN_ShiftLeft(a_Values := a_lastValues);  // shift array left
+a_lastValues[NUM_STORED_VALS] := ultraSonicSensorFb.r_VoltageUltraSonicSensor;  // store last value
+
+// Aufgabe 15
+fb_MeanCalc(r_inputValue := ultraSonicSensorFb.r_VoltageUltraSonicSensor, r_forgettingFactor := r_forgettingFactor);
+r_meanVal := fb_MeanCalc.r_meanValueOutput;
+GVL_IO.AO_AnalogGauge := FUN_0to10V_TO_INT(r_AnalogValue0to10V := r_meanVal);
+]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
-      <LineId Id="231" Count="63" />
-      <LineId Id="358" Count="0" />
-      <LineId Id="354" Count="0" />
-      <LineId Id="356" Count="1" />
-      <LineId Id="355" Count="0" />
-      <LineId Id="384" Count="3" />
-      <LineId Id="383" Count="0" />
-      <LineId Id="295" Count="2" />
-      <LineId Id="353" Count="0" />
-      <LineId Id="298" Count="0" />
-      <LineId Id="363" Count="2" />
-      <LineId Id="361" Count="1" />
-      <LineId Id="299" Count="5" />
-      <LineId Id="360" Count="0" />
-      <LineId Id="305" Count="0" />
-      <LineId Id="308" Count="0" />
-      <LineId Id="352" Count="0" />
-      <LineId Id="309" Count="0" />
-      <LineId Id="367" Count="4" />
-      <LineId Id="366" Count="0" />
-      <LineId Id="372" Count="0" />
-      <LineId Id="310" Count="4" />
-      <LineId Id="320" Count="0" />
-      <LineId Id="351" Count="0" />
-      <LineId Id="381" Count="0" />
-      <LineId Id="374" Count="4" />
-      <LineId Id="373" Count="0" />
-      <LineId Id="379" Count="1" />
-      <LineId Id="322" Count="3" />
-      <LineId Id="350" Count="0" />
-      <LineId Id="326" Count="0" />
-      <LineId Id="337" Count="2" />
-      <LineId Id="129" Count="0" />
+      <LineId Id="483" Count="142" />
+      <LineId Id="415" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FUN_0to10V_TO_INT" Id="{b8c208d2-2c9d-4ba4-8649-8333903f35b9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION FUN_0to10V_TO_INT : INT
+VAR_INPUT
+	r_AnalogValue0to10V		: REAL;
+END_VAR
+VAR
+	i_Val					: DINT;
+END_VAR
+VAR CONSTANT
+	MAX_VOLTAGE				: REAL := 10.0;
+	MAX_INT					: INT := 32767;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Multiply
+i_Val := REAL_TO_DINT(r_AnalogValue0to10V * INT_TO_REAL(MAX_INT));
+
+// divide by 10, convert to int
+FUN_0to10V_TO_INT := DINT_TO_INT(i_Val / REAL_TO_INT(MAX_VOLTAGE));]]></ST>
+    </Implementation>
+    <LineIds Name="FUN_0to10V_TO_INT">
+      <LineId Id="19" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="21" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

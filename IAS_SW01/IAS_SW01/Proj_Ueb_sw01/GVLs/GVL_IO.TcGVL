@@ -5,8 +5,12 @@
 VAR_GLOBAL
 	DI_BtnYellow 	AT %I* : BOOL;
 	DI_BtnBlue	 	AT %I* : BOOL;
+	
 	DO_LampRed 		AT %Q* : BOOL;
 	DO_LampGreen	AT %Q* : BOOL;
+	
+	AI_UltraSonicSensor  AT %I* : INT;
+	AO_AnalogGauge		 AT %Q* : INT;
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="Fb_MeanCalculatorWForgettingFactor" Id="{000cd403-cf86-4029-9857-9d0889ee631f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Fb_MeanCalculatorWForgettingFactor
+VAR_IN_OUT
+	r_inputValue			: REAL;
+	r_forgettingFactor		: REAL;
+END_VAR
+VAR_OUTPUT
+	r_meanValueOutput		: REAL;
+END_VAR
+VAR
+	r_meanValue				: REAL;
+	lr_numerator			: LREAL;
+	lr_denominator			: LREAL;
+	lr_forgFactorExp		: LREAL;
+	i_counter				: DINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[r_meanValue := (r_forgettingFactor * r_meanValue) + (1-r_forgettingFactor) * r_inputValue;
+r_meanValueOutput := r_meanValue;]]></ST>
+    </Implementation>
+    <LineIds Name="Fb_MeanCalculatorWForgettingFactor">
+      <LineId Id="38" Count="0" />
+      <LineId Id="34" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

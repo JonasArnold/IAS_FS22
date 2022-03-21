@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="En_DistanceMode" Id="{36986fab-1f1a-428f-9e67-6bc6eb0e702b}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE En_DistanceMode :
+(
+	Default := 0,
+	NearerIsHigher,
+	NearerIsLower
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

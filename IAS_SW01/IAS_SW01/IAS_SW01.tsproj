@@ -96,6 +96,10 @@
 							<Name>GVL_IO.DI_BtnBlue</Name>
 							<Type>BOOL</Type>
 						</Var>
+						<Var>
+							<Name>GVL_IO.AI_UltraSonicSensor</Name>
+							<Type>INT</Type>
+						</Var>
 					</Vars>
 					<Vars VarGrpType="2" AreaNo="1">
 						<Name>PlcTask Outputs</Name>
@@ -106,6 +110,10 @@
 						<Var>
 							<Name>GVL_IO.DO_LampGreen</Name>
 							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL_IO.AO_AnalogGauge</Name>
+							<Type>INT</Type>
 						</Var>
 					</Vars>
 					<Contexts>
@@ -921,6 +929,12 @@ Bit1: Value bigger/equal Limit2]]></Comment>
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 3 (EL2004)">
 				<Link VarA="PlcTask Outputs^GVL_IO.DO_LampGreen" VarB="Channel 2^Output"/>
 				<Link VarA="PlcTask Outputs^GVL_IO.DO_LampRed" VarB="Channel 1^Output"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 4 (EL3004)">
+				<Link VarA="PlcTask Inputs^GVL_IO.AI_UltraSonicSensor" VarB="AI Standard Channel 1^Value"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 5 (EL4034)">
+				<Link VarA="PlcTask Outputs^GVL_IO.AO_AnalogGauge" VarB="AO Outputs Channel 1^Analog output"/>
 			</OwnerB>
 		</OwnerA>
 	</Mappings>

@@ -17,6 +17,9 @@
     <LibraryReferences>{24d28a62-22ed-49b2-a7e4-df67eaee6301}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DUTs\En_DistanceMode.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\En_ToggleMode.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -27,7 +30,16 @@
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Fb_MeanCalculatorWForgettingFactor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Fb_EdgeDetector.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Fb_UltrasonicSensor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FUN_0to10V_TO_INT.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FUN_Add.TcPOU">
@@ -43,6 +55,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FUN_ShiftLeft.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FUN_MeanCalculator.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\PRG_DoSomeMath.TcPOU">
