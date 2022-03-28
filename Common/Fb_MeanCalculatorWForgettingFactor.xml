@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="Beckhoff Automation GmbH" productName="TwinCAT PLC Control" productVersion="3.5.13.21" creationDateTime="2022-03-28T15:37:30.2576494" />
+  <contentHeader name="Proj_Ueb_sw01" modificationDateTime="2022-03-28T15:37:30.2576494">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+    <addData>
+      <data name="http://www.3s-software.com/plcopenxml/projectinformation" handleUnknown="implementation">
+        <ProjectInformation />
+      </data>
+    </addData>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous>
+      <pou name="Fb_MeanCalculatorWForgettingFactor" pouType="functionBlock">
+        <interface>
+          <inOutVars>
+            <variable name="r_inputValue">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="r_forgettingFactor">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+          </inOutVars>
+          <outputVars>
+            <variable name="r_meanValueOutput">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="r_meanValue">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="lr_numerator">
+              <type>
+                <LREAL />
+              </type>
+            </variable>
+            <variable name="lr_denominator">
+              <type>
+                <LREAL />
+              </type>
+            </variable>
+            <variable name="lr_forgFactorExp">
+              <type>
+                <LREAL />
+              </type>
+            </variable>
+            <variable name="i_counter">
+              <type>
+                <DINT />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">r_meanValue := (r_forgettingFactor * r_meanValue) + (1-r_forgettingFactor) * r_inputValue;
+r_meanValueOutput := r_meanValue;</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">FUNCTION_BLOCK Fb_MeanCalculatorWForgettingFactor
+VAR_IN_OUT
+	r_inputValue			: REAL;
+	r_forgettingFactor		: REAL;
+END_VAR
+VAR_OUTPUT
+	r_meanValueOutput		: REAL;
+END_VAR
+VAR
+	r_meanValue				: REAL;
+	lr_numerator			: LREAL;
+	lr_denominator			: LREAL;
+	lr_forgFactorExp		: LREAL;
+	i_counter				: DINT;
+END_VAR
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>000cd403-cf86-4029-9857-9d0889ee631f</ObjectId>
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Object Name="Fb_MeanCalculatorWForgettingFactor" ObjectId="000cd403-cf86-4029-9857-9d0889ee631f" />
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>

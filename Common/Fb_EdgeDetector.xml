@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="Beckhoff Automation GmbH" productName="TwinCAT PLC Control" productVersion="3.5.13.21" creationDateTime="2022-03-28T15:35:07.6896571" />
+  <contentHeader name="Proj_Ueb_sw01" modificationDateTime="2022-03-28T15:35:07.6936574">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+    <addData>
+      <data name="http://www.3s-software.com/plcopenxml/projectinformation" handleUnknown="implementation">
+        <ProjectInformation />
+      </data>
+    </addData>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous>
+      <pou name="Fb_EdgeDetector" pouType="functionBlock">
+        <interface>
+          <inputVars>
+            <variable name="inputValue">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+          </inputVars>
+          <outputVars>
+            <variable name="risingEdge">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="fallingEdge">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="doublePress">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="triplePress">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="i_risingEdgCnt">
+              <type>
+                <INT />
+              </type>
+              <initialValue>
+                <simpleValue value="0" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> internal var</xhtml>
+              </documentation>
+            </variable>
+            <variable name="lastValue">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> last value registered</xhtml>
+              </documentation>
+            </variable>
+            <variable name="tlastPush">
+              <type>
+                <TIME />
+              </type>
+              <initialValue>
+                <simpleValue value="TIME()" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> time when last push happened</xhtml>
+              </documentation>
+            </variable>
+            <variable name="tLastRising">
+              <type>
+                <TIME />
+              </type>
+              <initialValue>
+                <simpleValue value="TIME()" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> time when last rising edge happened</xhtml>
+              </documentation>
+            </variable>
+            <variable name="tDebounce">
+              <type>
+                <TIME />
+              </type>
+              <initialValue>
+                <simpleValue value="TIME#20ms" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> time to debounce input value</xhtml>
+              </documentation>
+            </variable>
+            <variable name="tMultiPressTime">
+              <type>
+                <TIME />
+              </type>
+              <initialValue>
+                <simpleValue value="TIME#200ms" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> time between which multiple presses to allow the user to press button again</xhtml>
+              </documentation>
+            </variable>
+          </localVars>
+          <addData>
+            <data name="http://www.3s-software.com/plcopenxml/accessmodifiers" handleUnknown="implementation">
+              <AccessModifiers Internal="true" />
+            </data>
+          </addData>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">// reset output signals
+fallingEdge := FALSE;
+risingEdge := FALSE;
+doublePress := FALSE;
+triplePress := FALSE;
+
+// if a change happened and new values get accepted
+IF(inputValue &lt;&gt; lastValue AND (tlastPush + tDebounce) &lt; TIME()) THEN
+	IF(inputValue) THEN
+		i_risingEdgCnt := i_risingEdgCnt + 1;
+		
+		tLastRising := TIME(); // reset last rising time (give another tMultiPressTime time to press the button another time
+	ELSE
+		fallingEdge := TRUE;
+	END_IF
+	lastValue := inputValue;  // overwrite stored value
+	tlastPush := TIME();
+END_IF
+
+
+// handle rising edge (with double press)
+CASE i_risingEdgCnt OF
+	1:
+	IF (tLastRising + tMultiPressTime) &lt; TIME() THEN
+		risingEdge := TRUE;
+		i_risingEdgCnt := 0;
+	END_IF
+	
+	2:
+	IF (tLastRising + tMultiPressTime) &lt; TIME() THEN
+		doublePress := TRUE;
+		i_risingEdgCnt := 0;
+	END_IF
+	
+	3:
+	// instantly report triple press, since no more amount of multi press is output
+	triplePress := TRUE;
+	i_risingEdgCnt := 0;
+ELSE
+	;
+END_CASE</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">FUNCTION_BLOCK INTERNAL Fb_EdgeDetector
+VAR_INPUT
+	inputValue		: BOOL;
+END_VAR
+VAR_OUTPUT
+	risingEdge		: BOOL;
+	fallingEdge		: BOOL;
+	doublePress		: BOOL;
+	triplePress		: BOOL;
+END_VAR
+VAR
+	i_risingEdgCnt			: INT := 0;  		// internal var
+	lastValue 				: BOOL;				// last value registered
+	tlastPush				: TIME := TIME();	// time when last push happened
+	tLastRising				: TIME := TIME();	// time when last rising edge happened
+	tDebounce	    		: TIME := T#20MS;   // time to debounce input value
+	tMultiPressTime			: TIME := T#200MS;	// time between which multiple presses to allow the user to press button again
+	
+END_VAR
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>d746b410-be40-4fa8-9299-53feae6bfcc6</ObjectId>
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Object Name="Fb_EdgeDetector" ObjectId="d746b410-be40-4fa8-9299-53feae6bfcc6" />
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>
