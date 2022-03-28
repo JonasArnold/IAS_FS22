@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="F_PWM" Id="{7ee31fd3-e6fa-429e-824b-bf37eb0a85c7}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_PWM : REAL
+VAR_INPUT
+	dutyPct	: REAL;	// Duty cycle (%)
+	ymin	: REAL; // Minimalwert
+	ymax	: REAL;	// Maximalwert
+	w		: REAL; // Kreisfrequenz (rad/s)
+	t		: REAL; // Time (s)
+END_VAR
+VAR
+	sinRes	: REAL; // current sin result
+	sinResDuty: REAL; // sine result when duty cylce is reached
+	t_duty	: REAL; // time when duty cycle is reached
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[sinRes := SIN(w*t);
+t_duty := (dutyPct / 100.0) * ((2.0 * 3.14) / w);
+sinResDuty := SIN(w*t_duty);
+
+IF (sinRes > sinResDuty) THEN
+	F_PWM := ymin;
+ELSE
+	F_PWM := ymax;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="F_PWM">
+      <LineId Id="15" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="17" Count="4" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

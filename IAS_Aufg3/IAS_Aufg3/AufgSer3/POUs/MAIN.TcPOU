@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="MAIN" Id="{65865ee4-1428-4da5-8f43-0853de2fabad}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	// Time
+	t				: REAL := 0.0;
+	T_task			: INT := 10;  // task cycle time (ms)
+	
+	// Functions
+	ysine			: REAL;
+	ysquare			: REAL;
+	fbPWM			: FB_PWM;				
+	ypwm			: REAL;
+END_VAR
+VAR CONSTANT
+	INT_MAX			: INT := 32767;  // maximum value of integer type
+	
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Aufg 1 Sine function
+ysine := F_Sine(A := 100.0, yoff := 20.0, w := 2, t := t/1000.0);
+
+// Aufg 2 Square function
+ysquare := F_Square(ymax := 100.0, ymin := -100.0, yoff := 20.0, w := 2, t := t/1000.0);
+
+// Aufg 3 PWM function
+fbPWM(dutyPct := 25.0, ymax := 100.0, ymin := 0.0, w := 2, t := t/1000.0);
+ypwm := fbPWM.y;
+
+// increment time
+
+IF(t+T_task < INT_MAX) THEN
+	t := t + T_Task;	
+ELSE
+	t := 0;
+END_IF
+]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="13" Count="1" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="45" Count="1" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="37" Count="1" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="8" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
