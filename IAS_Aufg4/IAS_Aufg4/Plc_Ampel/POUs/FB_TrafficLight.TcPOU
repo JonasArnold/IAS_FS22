@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_TrafficLight" Id="{5c204fba-31a4-4ff6-939b-a4b43b44ff6c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_TrafficLight
+VAR_INPUT
+	clear_road 			: BOOL;
+	block_road 			: BOOL;
+	disable_system		: BOOL;
+END_VAR
+VAR_OUTPUT
+	red_light			: BOOL;
+	yellow_light		: BOOL;
+	green_light			: BOOL;
+END_VAR
+VAR
+	// state variables
+	currentState		: 	EN_TRAFFICLIGHT_STATE := EN_TRAFFICLIGHT_STATE.STATE_INIT;
+	lastState			: 	EN_TRAFFICLIGHT_STATE := EN_TRAFFICLIGHT_STATE.STATE_UNDEFINED;
+	timer				: 	TON;
+	// flag to reset the timer after the state machine has used it
+	resetTimer			:	BOOL;
+	// flag to update last state
+	transitionDone		: 	BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[timer();  // call timer
+
+// state machine
+CASE currentState OF
+	EN_TRAFFICLIGHT_STATE.STATE_UNDEFINED:
+	// jump to init	
+	currentState := EN_TRAFFICLIGHT_STATE.STATE_INIT;
+	
+	//*****************************//
+	EN_TRAFFICLIGHT_STATE.STATE_INIT:
+	// jump to red
+	currentState := EN_TRAFFICLIGHT_STATE.STATE_RED;
+	
+	//*****************************//
+	EN_TRAFFICLIGHT_STATE.STATE_RED:
+	// entry action
+	IF(currentState <> lastState) THEN
+		// enable only red light
+		red_light := TRUE; yellow_light := FALSE; green_light := FALSE;
+		lastState := currentState;  // update last state
+	END_IF
+	
+	// clear road (prio 2)
+	IF(clear_road) THEN
+		currentState := EN_TRAFFICLIGHT_STATE.STATE_RED_YELLOW;
+	END_IF
+	
+	// clear road (prio 1)
+	IF(disable_system) THEN
+		currentState := EN_TRAFFICLIGHT_STATE.STATE_DISABLED;
+	END_IF
+	
+	//*****************************//
+	EN_TRAFFICLIGHT_STATE.STATE_RED_YELLOW:
+	// entry action
+	IF(currentState <> lastState) THEN
+		// enable red and yellow light
+		red_light := TRUE; yellow_light := TRUE; green_light := FALSE;
+		lastState := currentState;  // update last state
+	END_IF
+	
+	// start timer for automatic state change
+	timer.PT := T#2S;
+	timer.IN := TRUE;
+	
+	// timer finished => exit action
+	IF timer.Q THEN
+		currentState := EN_TRAFFICLIGHT_STATE.STATE_GREEN;
+		resetTimer := TRUE;
+	END_IF
+	
+	//*****************************//
+	EN_TRAFFICLIGHT_STATE.STATE_YELLOW:
+	// entry action
+	IF(currentState <> lastState) THEN
+		// enable yellow light only
+		red_light := FALSE; yellow_light := TRUE; green_light := FALSE;
+		lastState := currentState;  // update last state
+	END_IF
+	
+	// start timer for automatic state change
+	timer.PT := T#5S;
+	timer.IN := TRUE;
+	
+	// timer finished => exit action
+	IF timer.Q THEN
+		currentState := EN_TRAFFICLIGHT_STATE.STATE_RED;
+		resetTimer := TRUE;
+	END_IF
+	
+	//*****************************//
+	EN_TRAFFICLIGHT_STATE.STATE_GREEN:
+	// entry action
+	IF(currentState <> lastState) THEN
+		// enable green light only
+		red_light := FALSE; yellow_light := FALSE; green_light := TRUE;
+		lastState := currentState;  // update last state
+	END_IF
+	
+	// block_road signal
+	IF(block_road) THEN
+		currentState := EN_TRAFFICLIGHT_STATE.STATE_YELLOW;
+	END_IF
+	
+	//*****************************//
+	EN_TRAFFICLIGHT_STATE.STATE_DISABLED:
+	// disable all lights
+	red_light := FALSE; green_light := FALSE;
+	
+	// start timer for yellow blinking
+	timer.PT := T#1S;
+	timer.IN := TRUE;
+	
+	// invert yellow light (blink)
+	IF timer.Q THEN
+		yellow_light := NOT yellow_light;
+		resetTimer := TRUE;
+	END_IF
+	
+	// system was re-enabled 
+	IF (disable_system = FALSE) THEN
+		lastState := currentState;  // update last state
+		currentState := EN_TRAFFICLIGHT_STATE.STATE_RED;
+		resetTimer := TRUE;
+	END_IF
+	
+END_CASE
+
+// reset timer since it was used
+IF resetTimer THEN
+	timer.IN := FALSE;
+	timer();  // call to trigger edge
+	resetTimer := FALSE;	
+END_IF
+]]></ST>
+    </Implementation>
+    <LineIds Name="FB_TrafficLight">
+      <LineId Id="81" Count="0" />
+      <LineId Id="83" Count="0" />
+      <LineId Id="82" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="44" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="79" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="74" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="55" Count="1" />
+      <LineId Id="53" Count="0" />
+      <LineId Id="168" Count="0" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="58" Count="2" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="65" Count="2" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="75" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="69" Count="3" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="99" Count="0" />
+      <LineId Id="101" Count="1" />
+      <LineId Id="104" Count="0" />
+      <LineId Id="100" Count="0" />
+      <LineId Id="87" Count="0" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="88" Count="0" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="76" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="106" Count="3" />
+      <LineId Id="166" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="105" Count="0" />
+      <LineId Id="112" Count="7" />
+      <LineId Id="111" Count="0" />
+      <LineId Id="110" Count="0" />
+      <LineId Id="77" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="120" Count="3" />
+      <LineId Id="165" Count="0" />
+      <LineId Id="124" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="126" Count="2" />
+      <LineId Id="125" Count="0" />
+      <LineId Id="129" Count="0" />
+      <LineId Id="131" Count="1" />
+      <LineId Id="153" Count="0" />
+      <LineId Id="147" Count="1" />
+      <LineId Id="136" Count="0" />
+      <LineId Id="142" Count="0" />
+      <LineId Id="140" Count="0" />
+      <LineId Id="139" Count="0" />
+      <LineId Id="154" Count="0" />
+      <LineId Id="143" Count="0" />
+      <LineId Id="145" Count="0" />
+      <LineId Id="156" Count="0" />
+      <LineId Id="146" Count="0" />
+      <LineId Id="138" Count="0" />
+      <LineId Id="135" Count="0" />
+      <LineId Id="130" Count="0" />
+      <LineId Id="169" Count="0" />
+      <LineId Id="133" Count="0" />
+      <LineId Id="155" Count="0" />
+      <LineId Id="134" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="94" Count="0" />
+      <LineId Id="96" Count="0" />
+      <LineId Id="144" Count="0" />
+      <LineId Id="98" Count="0" />
+      <LineId Id="97" Count="0" />
+      <LineId Id="95" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

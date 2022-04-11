@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="EN_TRAFFICLIGHT_STATE" Id="{63215e7e-428d-4e9b-a0fe-250a4d66b025}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE EN_TRAFFICLIGHT_STATE :
+(
+	STATE_UNDEFINED := 0,
+	STATE_INIT,
+	STATE_DISABLED,
+	STATE_RED,
+	STATE_RED_YELLOW,
+	STATE_YELLOW,
+	STATE_GREEN
+);
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>
