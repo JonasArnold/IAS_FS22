@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="MAIN" Id="{f068ac16-b19f-412f-80d0-6edc4ee19653}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	// sinus
+	u_k_sin			: REAL;				// u_k sinus
+	u_k_sin_f		: REAL;				// u_k sinus filtered
+	w_sin			: REAL := (1/tau);	// Frequenz
+	lowPassSin		: FB_LowpassFilter;
+	// constant
+	u_k_cst			: REAL;				// u_k constant
+	u_k_cst_f		: REAL;				// u_k constant filtered
+	lowPassConst	: FB_LowpassFilter;
+	// pt2
+	d				: REAL		:= 0.2;
+	w0				: REAL		:= 10;
+	u_k_pt2_f		: REAL;				// u_k pt2 filtered
+	secondOrder		: FB_SecondOrderHold;
+	// integrator
+	pwm				: FB_PWM;
+	integrator		: FB_Integrator;
+	dutyCyclePct	: REAL		:= 25; 	// duty cycle for PWM in %
+	pwmOut			: REAL;				// pwm signal
+	integratorOut	: REAL;				// integrated PWM signal
+	
+	actTime			: REAL 	:= 0;		// time increment
+	
+END_VAR
+VAR CONSTANT
+	sampleTime		: REAL	:= 0.001;	// Abtastzeit	
+	tau 			: REAL	:= 0.1;		// filter constant
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Integrator PWM
+pwm(dutyPct := dutyCyclePct, ymin := 0, ymax := 5, w := 3.14, t := actTime);
+pwmOut := pwm.y;
+integrator(u_k := pwmOut, T := sampleTime);
+integratorOut := integrator.y_k;
+
+// Lowpass Sinus
+u_k_sin := F_Sine(A := 1.0, yoff := 0.0, w := w_sin, t := actTime);
+lowPassSin(u_k := u_k_sin, T := sampleTime, tau := tau);
+u_k_sin_f := lowPassSin.y_k;
+
+// PT2 with sinus
+secondOrder(u_k := u_k_sin, T := sampleTime, d := d, w0 := w0);
+u_k_pt2_f := secondOrder.y_k;
+
+actTime := actTime + sampleTime;	
+]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="14" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="53" Count="0" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="58" Count="0" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="15" Count="1" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="35" Count="2" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="10" Count="1" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

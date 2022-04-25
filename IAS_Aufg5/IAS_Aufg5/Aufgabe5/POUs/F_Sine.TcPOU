@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="F_Sine" Id="{487d2d3b-3a85-4c4d-bc55-951ea6b2f182}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_Sine : REAL
+VAR_INPUT
+	A		: REAL;	// Amplitude
+	yoff	: REAL; // offset
+	w		: REAL; // Kreisfrequenz (rad/s)
+	t		: REAL; // Time (s)
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_Sine := (A * SIN(w*t)) + yoff;]]></ST>
+    </Implementation>
+    <LineIds Name="F_Sine">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

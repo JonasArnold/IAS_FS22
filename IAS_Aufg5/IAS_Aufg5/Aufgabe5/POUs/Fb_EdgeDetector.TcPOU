@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="Fb_EdgeDetector" Id="{d746b410-be40-4fa8-9299-53feae6bfcc6}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK INTERNAL Fb_EdgeDetector
+VAR_INPUT
+	inputValue		: BOOL;
+END_VAR
+VAR_OUTPUT
+	risingEdge		: BOOL;
+	fallingEdge		: BOOL;
+	doublePress		: BOOL;
+	triplePress		: BOOL;
+END_VAR
+VAR
+	i_risingEdgCnt			: INT := 0;  		// internal var
+	lastValue 				: BOOL;				// last value registered
+	tlastPush				: TIME := TIME();	// time when last push happened
+	tLastRising				: TIME := TIME();	// time when last rising edge happened
+	tDebounce	    		: TIME := T#20MS;   // time to debounce input value
+	tMultiPressTime			: TIME := T#200MS;	// time between which multiple presses to allow the user to press button again
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// reset output signals
+fallingEdge := FALSE;
+risingEdge := FALSE;
+doublePress := FALSE;
+triplePress := FALSE;
+
+// if a change happened and new values get accepted
+IF(inputValue <> lastValue AND (tlastPush + tDebounce) < TIME()) THEN
+	IF(inputValue) THEN
+		i_risingEdgCnt := i_risingEdgCnt + 1;
+		
+		tLastRising := TIME(); // reset last rising time (give another tMultiPressTime time to press the button another time
+	ELSE
+		fallingEdge := TRUE;
+	END_IF
+	lastValue := inputValue;  // overwrite stored value
+	tlastPush := TIME();
+END_IF
+
+
+// handle rising edge (with double press)
+CASE i_risingEdgCnt OF
+	1:
+	IF (tLastRising + tMultiPressTime) < TIME() THEN
+		risingEdge := TRUE;
+		i_risingEdgCnt := 0;
+	END_IF
+	
+	2:
+	IF (tLastRising + tMultiPressTime) < TIME() THEN
+		doublePress := TRUE;
+		i_risingEdgCnt := 0;
+	END_IF
+	
+	3:
+	// instantly report triple press, since no more amount of multi press is output
+	triplePress := TRUE;
+	i_risingEdgCnt := 0;
+ELSE
+	;
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="Fb_EdgeDetector">
+      <LineId Id="3" Count="39" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

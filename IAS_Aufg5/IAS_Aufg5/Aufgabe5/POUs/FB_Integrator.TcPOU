@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_Integrator" Id="{d2a5d47a-22c8-4def-a768-73763ee1c5c1}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Integrator
+VAR_INPUT
+	u_k		: REAL;
+	T		: REAL;
+END_VAR
+VAR_OUTPUT
+	y_k		: REAL;
+END_VAR
+VAR
+	y_k_1	: REAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[y_k := u_k * T + y_k_1;
+y_k_1 := y_k;]]></ST>
+    </Implementation>
+    <LineIds Name="FB_Integrator">
+      <LineId Id="13" Count="0" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

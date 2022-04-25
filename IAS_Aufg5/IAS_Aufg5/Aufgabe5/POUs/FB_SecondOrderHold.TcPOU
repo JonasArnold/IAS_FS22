@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_SecondOrderHold" Id="{7226bd99-01fe-4b1d-bd86-8d10e11cde16}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SecondOrderHold
+VAR_INPUT
+	u_k		: REAL; // Eingangswert
+	T		: REAL;	// Zeitkonstante
+	d		: REAL; // Daempfung
+	w0		: REAL; // Eigenfrequenz 
+END_VAR
+VAR_OUTPUT
+	y_k		: REAL; // Ausgangswert
+END_VAR
+VAR
+	a		: REAL; // Variable fuer w0^2 * T^2
+	b 		: REAL; // Variable fuer 2 * d * w0 * T
+	y_k_1	: REAL; // letzer Ausgangswert
+	y_k_2	: REAL; // vorletzer Ausgangswert
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[a := (w0 * w0) * (T * T);
+b := 2 * d * w0 * T; 
+
+y_k := (u_k*a + 2*y_k_1 + b*y_k_1 - y_k_2) / (1 + b + a); 
+
+y_k_2 := y_k_1;
+y_k_1 := y_k; 
+]]></ST>
+    </Implementation>
+    <LineIds Name="FB_SecondOrderHold">
+      <LineId Id="9" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="25" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

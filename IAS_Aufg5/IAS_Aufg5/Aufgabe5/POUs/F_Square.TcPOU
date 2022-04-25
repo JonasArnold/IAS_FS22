@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="F_Square" Id="{ce683447-e8cf-4378-bff1-06638e6e9c36}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_Square : REAL
+VAR_INPUT
+	ymin	: REAL;	// Minimalwert
+	ymax	: REAL;	// Maximalwert
+	yoff	: REAL; // offset
+	w		: REAL; // Kreisfrequenz (rad/s)
+	t		: REAL; // Time (s)
+END_VAR
+VAR
+	sinRes	: REAL; // sine result
+	squareRes: REAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[sinRes := SIN(w*t);
+
+IF (sinRes > 0) THEN
+	squareRes := ymin;
+ELSE
+	squareRes := ymax;
+END_IF
+
+F_Square := squareRes + yoff;]]></ST>
+    </Implementation>
+    <LineIds Name="F_Square">
+      <LineId Id="3" Count="7" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

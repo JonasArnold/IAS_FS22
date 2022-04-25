@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_LowpassFilter" Id="{17145f0e-6fb8-4d2d-b6d4-0b6abddf4921}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_LowpassFilter
+VAR_INPUT
+	u_k		: REAL;
+	T		: REAL;
+	tau		: REAL;
+END_VAR
+VAR_OUTPUT
+	y_k		: REAL;
+END_VAR
+VAR
+	y_k_1	: REAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// limit tau
+IF tau < 0.0001 THEN
+	tau := 0.0001;
+END_IF
+
+y_k := tau / (T+tau) * y_k_1 + T / (T+tau) * u_k;
+y_k_1 := y_k;]]></ST>
+    </Implementation>
+    <LineIds Name="FB_LowpassFilter">
+      <LineId Id="21" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="19" Count="1" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="16" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

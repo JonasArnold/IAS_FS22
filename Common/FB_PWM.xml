@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="Beckhoff Automation GmbH" productName="TwinCAT PLC Control" productVersion="3.5.13.21" creationDateTime="2022-04-25T13:35:28.8870782" />
+  <contentHeader name="AufgSer3" modificationDateTime="2022-04-25T13:35:28.8870782">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+    <addData>
+      <data name="http://www.3s-software.com/plcopenxml/projectinformation" handleUnknown="implementation">
+        <ProjectInformation />
+      </data>
+    </addData>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous>
+      <pou name="FB_PWM" pouType="functionBlock">
+        <interface>
+          <inputVars>
+            <variable name="dutyPct">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Duty cycle (%)</xhtml>
+              </documentation>
+            </variable>
+            <variable name="ymin">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Minimalwert</xhtml>
+              </documentation>
+            </variable>
+            <variable name="ymax">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Maximalwert</xhtml>
+              </documentation>
+            </variable>
+            <variable name="w">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Kreisfrequenz (rad/s)</xhtml>
+              </documentation>
+            </variable>
+            <variable name="t">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Time (s)</xhtml>
+              </documentation>
+            </variable>
+          </inputVars>
+          <outputVars>
+            <variable name="y">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> pwm signal</xhtml>
+              </documentation>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="t_elapsed">
+              <type>
+                <REAL />
+              </type>
+              <initialValue>
+                <simpleValue value="0" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> time since start of pwm cycle [s]</xhtml>
+              </documentation>
+            </variable>
+            <variable name="last_t">
+              <type>
+                <REAL />
+              </type>
+              <initialValue>
+                <simpleValue value="0" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> time since last call	</xhtml>
+              </documentation>
+            </variable>
+            <variable name="t_cycle">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> T [s]</xhtml>
+              </documentation>
+            </variable>
+            <variable name="t_duty">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> time when the duty cycle is over</xhtml>
+              </documentation>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">// add up elapsed time
+t_elapsed := t_elapsed + (t - last_t);
+last_t := t;
+
+// calc times
+t_cycle := (2.0 * 3.14) / w;
+t_duty := (dutyPct / 100.0) * t_cycle;
+
+// set new t_start (either when the cylce time is reached or when t_elapsed is negative (failsafe))
+IF(t_elapsed &gt; t_cycle OR t_elapsed &lt; 0) THEN
+	t_elapsed := 0;
+END_IF
+
+// set pwm signal value
+IF (t_elapsed &gt; t_duty) THEN
+	y := ymin;
+ELSE
+	y := ymax;
+END_IF
+
+</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">FUNCTION_BLOCK FB_PWM
+VAR_INPUT
+	dutyPct	: REAL;	// Duty cycle (%)
+	ymin	: REAL; // Minimalwert
+	ymax	: REAL;	// Maximalwert
+	w		: REAL; // Kreisfrequenz (rad/s)
+	t		: REAL; // Time (s)
+END_VAR
+VAR_OUTPUT
+	y		: REAL; // pwm signal
+END_VAR
+VAR
+	t_elapsed: REAL := 0;  // time since start of pwm cycle [s]
+	last_t	: REAL := 0; // time since last call	
+	t_cycle	: REAL; // T [s]
+	t_duty	: REAL; // time when the duty cycle is over
+END_VAR
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>088ce0df-34a9-4711-be24-c6b1770f7857</ObjectId>
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Object Name="FB_PWM" ObjectId="088ce0df-34a9-4711-be24-c6b1770f7857" />
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>
