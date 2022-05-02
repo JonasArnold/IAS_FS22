@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <Task Name="SlowTask" Id="{4e34fccf-5ce6-4d44-92a9-92f072c34713}">
+    <!--CycleTime in micro seconds.-->
+    <CycleTime>10000</CycleTime>
+    <Priority>3</Priority>
+    <PouCall>
+      <Name>SLOW</Name>
+    </PouCall>
+    <TaskFBGuid>{6b3d270e-8952-45c7-8c4b-8717f4383976}</TaskFBGuid>
+    <Fb_init>{15fded7c-cffc-4679-adc3-453ba9f70f14}</Fb_init>
+    <Fb_exit>{bcddf821-a546-4ea7-ad15-b1f9ae79b853}</Fb_exit>
+    <CycleUpdate>{2c447bb0-fb9b-422a-b57a-170b56cc897f}</CycleUpdate>
+    <PostCycleUpdate>{183b26f1-128c-410f-b16e-5afb3f7ecc62}</PostCycleUpdate>
+  </Task>
+</TcPlcObject>

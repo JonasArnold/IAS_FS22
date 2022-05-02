@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="MAIN" Id="{0ab64c77-f0ed-4726-a433-7ee9d5e73ed6}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	PT1T2_Param		: S_PT1T2_Param;	// Parameter des Prozess
+	PID_Param		: S_PID_Param;		// Parameter des Reglers
+	Mode			: E_System_Mode;	// Aktueller Modus
+	T				: REAL;				// Abtastzeit
+	PID_1			: FB_PID_Controller;// PID Regler Instanz
+	PT1T2_1			: FB_PT1T2_Process; // PT1T2 System Instanz
+	ref				: REAL;				// Referenzgroesse
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

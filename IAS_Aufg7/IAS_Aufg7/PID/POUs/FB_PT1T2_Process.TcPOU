@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_PT1T2_Process" Id="{f15ec977-0871-4149-9226-e72fb5f13e74}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_PT1T2_Process
+VAR_INPUT
+	u		: REAL;				// Aktuelle Steuergroesse
+	Mode	: E_System_Mode;	// Aktueller Modus
+	Param	: S_PT1T2_Param;	// Parameter vom PT1T2 Modell
+	T		: REAL;				// Abtastzeit
+END_VAR
+VAR_OUTPUT
+	y 		: REAL;				// Ausgangsgroesse
+END_VAR
+VAR
+	a1		: REAL;
+	a2		: REAL;
+	b0 		: REAL;
+	b1		: REAL;
+	c1		: REAL;
+	c2		: REAL;
+	y_k_1	: REAL;
+	y_k_2	: REAL;
+	u_k_1	: REAL;
+	u_k_2	: REAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE Mode OF
+	E_System_Mode.System_Init:
+		// calculate coefficients
+		a1 := EXP(-T/Param.T1);
+		a2 := EXP(-T/Param.T2);
+		b0 := (Param.K/(Param.T1-Param.T2))*(Param.T1*(1-a1)-Param.T2*(1-a2));
+		b1 := (Param.K/(Param.T1-Param.T2))*(Param.T2*a1*(1-a2)-Param.T1*(1-a1));;
+		c1 := -(a1 + a2);
+		c2 := a1 * a2;
+		
+	E_System_Mode.System_Run:
+		// implements differencial equation
+		y := b0*u_k_1 + b1*u_k_2 - c1*y_k_1 - c2*y_k_2;
+		
+		// store vars
+		u_k_2 := u_k_1;
+		u_k_1 := u;
+		y_k_2 := y_k_1;
+		y_k_1 := y;
+		
+	ELSE  // default assignment
+	;
+		
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="FB_PT1T2_Process">
+      <LineId Id="9" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="31" Count="1" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="24" Count="2" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="17" Count="1" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="44" Count="3" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="15" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

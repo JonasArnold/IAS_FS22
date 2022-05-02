@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_PID_Controller" Id="{0b6540e1-046e-44d5-9cc7-5dce5c9b6f82}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_PID_Controller
+VAR_INPUT
+	ref		: REAL;		// Aktuelle Referenzgroesse (Soll-Groesse)
+	y		: REAL;		// Aktuelle Regelgroesse (Ist-Groesse)
+	Mode	: E_System_Mode; 	// Aktueller Modus
+	Param	: S_PID_Param;		// PID Regler Parameter
+	T		: REAL;				// Abtastzeit
+END_VAR
+VAR_OUTPUT
+	v		: REAL; 			// Ausgangsgroesse
+END_VAR
+VAR
+	bi		: REAL;
+	bd		: REAL;
+	ad		: REAL;
+	p		: REAL;
+	i		: REAL;
+	d		: REAL;
+	y_k_1	: REAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE Mode OF
+	E_System_Mode.System_Init:
+		// calculate coefficients
+		bi := Param.Kp*T/Param.Ti;
+		bd := Param.Kp*Param.N*Param.Td/(Param.Td+Param.N*T);
+		ad := Param.Td/(Param.Td+Param.N*T);
+		
+	E_System_Mode.System_Run:
+		// implements differencial equation
+		p := Param.Kp*(ref-y);
+
+		v := p+i+d;
+		
+		// store vars
+		y_k_1 := y;
+		
+	ELSE  // default assignment
+	;
+		
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="FB_PID_Controller">
+      <LineId Id="16" Count="2" />
+      <LineId Id="52" Count="2" />
+      <LineId Id="27" Count="2" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="62" Count="0" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="37" Count="1" />
+      <LineId Id="40" Count="1" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
