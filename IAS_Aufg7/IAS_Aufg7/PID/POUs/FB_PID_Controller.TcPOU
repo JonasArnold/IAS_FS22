@@ -10,34 +10,50 @@ VAR_INPUT
 	T		: REAL;				// Abtastzeit
 END_VAR
 VAR_OUTPUT
-	v		: REAL; 			// Ausgangsgroesse
+	u_k		: REAL; 			// Ausgangsgroesse
 END_VAR
 VAR
-	bi		: REAL;
-	bd		: REAL;
-	ad		: REAL;
-	p		: REAL;
-	i		: REAL;
-	d		: REAL;
-	y_k_1	: REAL;
+	e_k 	: REAL;
+	e_k_1	: REAL;
+	u_p		: REAL;
+	u_i		: REAL;
+	u_d		: REAL;
+	u_i_k_1	: REAL;
+	bi		: REAL;				// calculation parameter for I term
+	bd		: REAL;				// calculation parameter for D term
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[CASE Mode OF
 	E_System_Mode.System_Init:
 		// calculate coefficients
-		bi := Param.Kp*T/Param.Ti;
-		bd := Param.Kp*Param.N*Param.Td/(Param.Td+Param.N*T);
-		ad := Param.Td/(Param.Td+Param.N*T);
+		bi := Param.Kp/Param.Ti;
+		bd := Param.Kp*Param.Td;
+		//Param.bd := Param.Kp*Param.N*Param.Td/(Param.Td+Param.N*T);
+		//ad := Param.Td/(Param.Td+Param.N*T);
 		
 	E_System_Mode.System_Run:
 		// implements differencial equation
-		p := Param.Kp*(ref-y);
-
-		v := p+i+d;
 		
-		// store vars
-		y_k_1 := y;
+		// compute the error
+		e_k := ref - y;
+		
+		// proportinal term
+		u_p := Param.Kp * e_k;
+		
+		// integral term (Trapezregel)
+		u_i := u_i_k_1 + bi * (e_k + e_k_1) / 2.0 * T;
+		
+		// derivative term
+		u_d	:= bd * (e_k - e_k_1) / T;
+		
+		// total command
+		u_k := u_p + u_i + u_d;
+		
+		// store vars for next step
+		u_i_k_1 := u_i; 
+		e_k_1 := e_k;
 		
 	ELSE  // default assignment
 	;
@@ -46,14 +62,27 @@ END_CASE]]></ST>
     </Implementation>
     <LineIds Name="FB_PID_Controller">
       <LineId Id="16" Count="2" />
-      <LineId Id="52" Count="2" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="103" Count="0" />
+      <LineId Id="53" Count="1" />
       <LineId Id="27" Count="2" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="88" Count="0" />
+      <LineId Id="87" Count="0" />
+      <LineId Id="90" Count="0" />
       <LineId Id="31" Count="0" />
       <LineId Id="60" Count="0" />
+      <LineId Id="91" Count="2" />
+      <LineId Id="98" Count="0" />
+      <LineId Id="100" Count="0" />
+      <LineId Id="99" Count="0" />
+      <LineId Id="101" Count="0" />
       <LineId Id="59" Count="0" />
       <LineId Id="62" Count="0" />
       <LineId Id="48" Count="0" />
       <LineId Id="63" Count="0" />
+      <LineId Id="102" Count="0" />
       <LineId Id="37" Count="1" />
       <LineId Id="40" Count="1" />
       <LineId Id="9" Count="0" />

@@ -5,18 +5,81 @@
 VAR
 	PT1T2_Param		: S_PT1T2_Param;	// Parameter des Prozess
 	PID_Param		: S_PID_Param;		// Parameter des Reglers
-	Mode			: E_System_Mode;	// Aktueller Modus
+	Mode			: E_System_Mode := E_System_Mode.System_Init;	// Aktueller Modus
 	T				: REAL;				// Abtastzeit
 	PID_1			: FB_PID_Controller;// PID Regler Instanz
 	PT1T2_1			: FB_PT1T2_Process; // PT1T2 System Instanz
 	ref				: REAL;				// Referenzgroesse
+	y_k				: REAL;				// Aktuelle Regelgroesse
+	u_k				: REAL;				// Aktuelle Steuergroesse
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[CASE Mode OF
+	E_System_Mode.System_Init:
+		// set process variables
+		PT1T2_Param.K 	:= 10;
+		PT1T2_Param.T1 	:= 0.1;
+		PT1T2_Param.T2 	:= 0.01;
+		
+		PID_Param.Kp 	:= 3/PT1T2_Param.K;
+		PID_Param.Ti 	:= PT1T2_Param.T1;
+		PID_Param.Td	:= PT1T2_Param.T2;
+		PID_Param.N	 	:= 10;
+		
+		// initialize variables
+		ref := 0;
+		y_k := 0;
+		u_k := 0;
+		T := 0.01;
+		
+		// call process and controller to initialize them
+		PT1T2_1(u := 0, Mode := Mode, Param := PT1T2_Param, T := T);
+		PID_1(ref := 0, y := 0, Mode := Mode, Param := PID_Param, T := T);
+		
+		// change to run mode
+		Mode := E_System_Mode.System_Run;
+		
+	E_System_Mode.System_Run:
+		// call controller
+		PID_1(ref := ref, y := y_k, Mode := Mode, Param := PID_Param, T := T);
+		u_k := PID_1.u_k;
+		
+		// call process
+		PT1T2_1(u := u_k, Mode := Mode, Param := PT1T2_Param, T := T);
+		y_k := PT1T2_1.y;
+		
+	ELSE  // default assignment
+	;
+		
+END_CASE]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
-      <LineId Id="2" Count="0" />
+      <LineId Id="16" Count="1" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="48" Count="1" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="52" Count="2" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="83" Count="0" />
+      <LineId Id="59" Count="1" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="76" Count="0" />
+      <LineId Id="81" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="61" Count="2" />
+      <LineId Id="65" Count="2" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="72" Count="0" />
+      <LineId Id="74" Count="0" />
+      <LineId Id="73" Count="0" />
+      <LineId Id="79" Count="0" />
+      <LineId Id="69" Count="1" />
+      <LineId Id="77" Count="0" />
+      <LineId Id="44" Count="3" />
+      <LineId Id="13" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
