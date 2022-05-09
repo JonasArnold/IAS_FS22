@@ -21,6 +21,7 @@ VAR
 	u_i_k_1	: REAL;
 	bi		: REAL;				// calculation parameter for I term
 	bd		: REAL;				// calculation parameter for D term
+	ad		: REAL;				// calculation parameter for D term
 	
 END_VAR
 ]]></Declaration>
@@ -29,9 +30,8 @@ END_VAR
 	E_System_Mode.System_Init:
 		// calculate coefficients
 		bi := Param.Kp/Param.Ti;
-		bd := Param.Kp*Param.Td;
-		//Param.bd := Param.Kp*Param.N*Param.Td/(Param.Td+Param.N*T);
-		//ad := Param.Td/(Param.Td+Param.N*T);
+		ad := Param.Td / (Param.Td + Param.N * T);
+		bd := (Param.Kp * Param.N * Param.Td) / (Param.Td + Param.N * T);
 		
 	E_System_Mode.System_Run:
 		// implements differencial equation
@@ -45,8 +45,8 @@ END_VAR
 		// integral term (Trapezregel)
 		u_i := u_i_k_1 + bi * (e_k + e_k_1) / 2.0 * T;
 		
-		// derivative term
-		u_d	:= bd * (e_k - e_k_1) / T;
+		// derivative term with filter
+		u_d	:= ad * u_d + bd * (e_k - e_k_1);
 		
 		// total command
 		u_k := u_p + u_i + u_d;
@@ -63,8 +63,7 @@ END_CASE]]></ST>
     <LineIds Name="FB_PID_Controller">
       <LineId Id="16" Count="2" />
       <LineId Id="52" Count="0" />
-      <LineId Id="103" Count="0" />
-      <LineId Id="53" Count="1" />
+      <LineId Id="132" Count="1" />
       <LineId Id="27" Count="2" />
       <LineId Id="85" Count="0" />
       <LineId Id="89" Count="0" />
@@ -73,9 +72,9 @@ END_CASE]]></ST>
       <LineId Id="90" Count="0" />
       <LineId Id="31" Count="0" />
       <LineId Id="60" Count="0" />
-      <LineId Id="91" Count="2" />
-      <LineId Id="98" Count="0" />
-      <LineId Id="100" Count="0" />
+      <LineId Id="91" Count="1" />
+      <LineId Id="128" Count="0" />
+      <LineId Id="126" Count="1" />
       <LineId Id="99" Count="0" />
       <LineId Id="101" Count="0" />
       <LineId Id="59" Count="0" />
