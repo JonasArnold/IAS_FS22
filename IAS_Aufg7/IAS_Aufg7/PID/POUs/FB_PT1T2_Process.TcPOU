@@ -31,7 +31,7 @@ END_VAR
 		a1 := EXP(-T/Param.T1);
 		a2 := EXP(-T/Param.T2);
 		b0 := (Param.K/(Param.T1-Param.T2))*(Param.T1*(1-a1)-Param.T2*(1-a2));
-		b1 := (Param.K/(Param.T1-Param.T2))*(Param.T2*a1*(1-a2)-Param.T1*(1-a1));;
+		b1 := (Param.K/(Param.T1-Param.T2))*(Param.T2*a1*(1-a2)-Param.T1*a2*(1-a1));;
 		c1 := -(a1 + a2);
 		c2 := a1 * a2;
 		

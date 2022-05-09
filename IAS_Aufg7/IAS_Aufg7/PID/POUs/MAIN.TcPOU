@@ -22,7 +22,7 @@ END_VAR
 		PT1T2_Param.T1 	:= 0.1;
 		PT1T2_Param.T2 	:= 0.01;
 		
-		PID_Param.Kp 	:= 3/PT1T2_Param.K;
+		PID_Param.Kp 	:= 1/PT1T2_Param.K;
 		PID_Param.Ti 	:= PT1T2_Param.T1;
 		PID_Param.Td	:= PT1T2_Param.T2;
 		PID_Param.N	 	:= 10;
@@ -31,7 +31,7 @@ END_VAR
 		ref := 0;
 		y_k := 0;
 		u_k := 0;
-		T := 0.01;
+		T := 0.001;
 		
 		// call process and controller to initialize them
 		PT1T2_1(u := 0, Mode := Mode, Param := PT1T2_Param, T := T);
