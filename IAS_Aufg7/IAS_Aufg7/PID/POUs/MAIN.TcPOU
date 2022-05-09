@@ -7,16 +7,29 @@ VAR
 	PID_Param		: S_PID_Param;		// Parameter des Reglers
 	Mode			: E_System_Mode := E_System_Mode.System_Init;	// Aktueller Modus
 	T				: REAL;				// Abtastzeit
+	t_run			: REAL;				// Aktuelle Laufzeit
 	PID_1			: FB_PID_Controller;// PID Regler Instanz
 	PT1T2_1			: FB_PT1T2_Process; // PT1T2 System Instanz
+	PWM_1			: FB_PWM;			// PWM generator
 	ref				: REAL;				// Referenzgroesse
 	y_k				: REAL;				// Aktuelle Regelgroesse
 	u_k				: REAL;				// Aktuelle Steuergroesse
+END_VAR
+
+VAR CONSTANT
+	f_pwm				: REAL := 10;		// PWM Frequency
+	w_pwm				: REAL := 2*PI*f_pwm;	// PWM radi
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[CASE Mode OF
 	E_System_Mode.System_Init:
+		// initialize variables
+		ref := 0;
+		y_k := 0;
+		u_k := 0;
+		T := 0.001;
+	
 		// set process variables
 		PT1T2_Param.K 	:= 10;
 		PT1T2_Param.T1 	:= 0.1;
@@ -25,13 +38,13 @@ END_VAR
 		PID_Param.Kp 	:= 1/PT1T2_Param.K;
 		PID_Param.Ti 	:= PT1T2_Param.T1;
 		PID_Param.Td	:= PT1T2_Param.T2;
+		PID_Param.Tr	:= (PID_Param.Td+PID_Param.Ti)/2;
 		PID_Param.N	 	:= 10;
+		PID_Param.umin  := 0;
+		PID_Param.umax	:= 10;
+		PID_Param.ARW 	:= TRUE;
 		
-		// initialize variables
-		ref := 0;
-		y_k := 0;
-		u_k := 0;
-		T := 0.001;
+
 		
 		// call process and controller to initialize them
 		PT1T2_1(u := 0, Mode := Mode, Param := PT1T2_Param, T := T);
@@ -41,9 +54,16 @@ END_VAR
 		Mode := E_System_Mode.System_Run;
 		
 	E_System_Mode.System_Run:
+		// increment time
+		t_run := t_run + T;
+		
+		// PWM Signal generator
+		PWM_1(dutyPct := 50, ymin := 25, ymax := 1000, w := w_pwm, t := t_run);
+		//ref := PWM_1.y;
+
 		// call controller
 		PID_1(ref := ref, y := y_k, Mode := Mode, Param := PID_Param, T := T);
-		u_k := PID_1.u_k;
+		u_k := PID_1.u_sat;
 		
 		// call process
 		PT1T2_1(u := u_k, Mode := Mode, Param := PT1T2_Param, T := T);
@@ -56,22 +76,30 @@ END_CASE]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
       <LineId Id="16" Count="1" />
+      <LineId Id="118" Count="3" />
+      <LineId Id="116" Count="1" />
       <LineId Id="21" Count="0" />
       <LineId Id="48" Count="1" />
       <LineId Id="22" Count="0" />
       <LineId Id="52" Count="2" />
       <LineId Id="51" Count="0" />
+      <LineId Id="114" Count="0" />
       <LineId Id="83" Count="0" />
-      <LineId Id="59" Count="1" />
-      <LineId Id="56" Count="0" />
-      <LineId Id="76" Count="0" />
-      <LineId Id="81" Count="0" />
+      <LineId Id="96" Count="0" />
+      <LineId Id="98" Count="0" />
+      <LineId Id="115" Count="0" />
+      <LineId Id="59" Count="0" />
       <LineId Id="64" Count="0" />
       <LineId Id="57" Count="0" />
       <LineId Id="61" Count="2" />
       <LineId Id="65" Count="2" />
       <LineId Id="50" Count="0" />
       <LineId Id="23" Count="0" />
+      <LineId Id="107" Count="0" />
+      <LineId Id="105" Count="1" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="99" Count="0" />
+      <LineId Id="102" Count="1" />
       <LineId Id="72" Count="0" />
       <LineId Id="74" Count="0" />
       <LineId Id="73" Count="0" />

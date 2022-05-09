@@ -7,6 +7,7 @@ STRUCT
 	Ti		: REAL;		// I Anteil
 	Td 		: REAL; 	// D Anteil
 	N		: UINT;		// D-Anteil Filterung
+	Tr		: REAL;		// Weight of Anti reset windup back calculation
 	ARW		: BOOL;		// Anti reset Windup aktiv
 	umin	: REAL;		// Steuergroesse minimaler Wert
 	umax	: REAL;		// Steuergroesse maximaler Wert

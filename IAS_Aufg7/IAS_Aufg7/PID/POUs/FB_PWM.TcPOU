@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_PWM" Id="{088ce0df-34a9-4711-be24-c6b1770f7857}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_PWM
+VAR_INPUT
+	dutyPct	: REAL;	// Duty cycle (%)
+	ymin	: REAL; // Minimalwert
+	ymax	: REAL;	// Maximalwert
+	w		: REAL; // Kreisfrequenz (rad/s)
+	t		: REAL; // Time (s)
+END_VAR
+VAR_OUTPUT
+	y		: REAL; // pwm signal
+END_VAR
+VAR
+	t_elapsed: REAL := 0;  // time since start of pwm cycle [s]
+	last_t	: REAL := 0; // time since last call	
+	t_cycle	: REAL; // T [s]
+	t_duty	: REAL; // time when the duty cycle is over
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// add up elapsed time
+t_elapsed := t_elapsed + (t - last_t);
+last_t := t;
+
+// calc times
+t_cycle := (2.0 * 3.14) / w;
+t_duty := (dutyPct / 100.0) * t_cycle;
+
+// set new t_start (either when the cylce time is reached or when t_elapsed is negative (failsafe))
+IF(t_elapsed > t_cycle OR t_elapsed < 0) THEN
+	t_elapsed := 0;
+END_IF
+
+// set pwm signal value
+IF (t_elapsed > t_duty) THEN
+	y := ymin;
+ELSE
+	y := ymax;
+END_IF
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="FB_PWM">
+      <LineId Id="3" Count="19" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
