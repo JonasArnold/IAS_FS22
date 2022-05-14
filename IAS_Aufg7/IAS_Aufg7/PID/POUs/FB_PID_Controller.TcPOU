@@ -17,8 +17,8 @@ VAR
 	e_k 	: REAL;
 	e_k_1	: REAL;
 	u_p		: REAL;
-	u_i		: REAL;
 	u_d		: REAL;
+	u_d_k_1	: REAL;
 	u_i_k_1	: REAL;
 	u_aw	: REAL;				// anti reset windup back calculation result
 	bi		: REAL;				// calculation parameter for I term
@@ -31,13 +31,14 @@ END_VAR
       <ST><![CDATA[CASE Mode OF
 	E_System_Mode.System_Init:
 		// calculate coefficients
-		bi := Param.Kp/Param.Ti;
+		bi := Param.Kp * T / (2*Param.Ti);
 		ad := Param.Td / (Param.Td + Param.N * T);
 		bd := (Param.Kp * Param.N * Param.Td) / (Param.Td + Param.N * T);
 		
 		// reset values
-		//u_i_k_1	:= 0;
-		//e_k_1	:= 0;
+		u_i_k_1	:= 0;
+		u_d_k_1	:= 0;
+		e_k_1	:= 0;
 		u_aw	:= 0;
 		
 	E_System_Mode.System_Run:
@@ -49,17 +50,11 @@ END_VAR
 		// proportinal term
 		u_p := Param.Kp * e_k;
 		
-		// integral term (Trapezregel)
-		u_i := u_i_k_1 + bi * (e_k + e_k_1) / 2.0 * T;
-		IF Param.ARW THEN
-			u_i := u_i + u_aw;
-		END_IF
-		
 		// derivative term with filter
-		u_d	:= ad * u_d + bd * (e_k - e_k_1);
+		u_d	:= ad * u_d_k_1 + bd * (e_k - e_k_1);
 		
-		// total command
-		u_k := u_p + u_i + u_d;
+		// total command (u_i from last cycle since it gets calculated later)
+		u_k := u_p + u_i_k_1 + u_d;
 		
 		// saturation
 		u_sat := u_k;
@@ -69,13 +64,18 @@ END_VAR
 			u_sat := Param.umin;
 		END_IF
 		
-		// anti reset windup
+		// anti reset windup for next loop
 		IF Param.ARW THEN
 			u_aw := (T/Param.Tr) * (u_sat - u_k);
+		ELSE
+			u_aw := 0;
 		END_IF
 		
+		// integral term (Trapezregel)
+		u_i_k_1 := u_i_k_1 + bi * (e_k + e_k_1) + u_aw;
+		
 		// store vars for next step
-		u_i_k_1 := u_i; 
+		u_d_k_1 := u_d;
 		e_k_1 := e_k;
 		
 	ELSE  // default assignment
@@ -87,7 +87,9 @@ END_CASE]]></ST>
       <LineId Id="16" Count="2" />
       <LineId Id="52" Count="0" />
       <LineId Id="132" Count="1" />
-      <LineId Id="153" Count="4" />
+      <LineId Id="153" Count="2" />
+      <LineId Id="188" Count="0" />
+      <LineId Id="156" Count="1" />
       <LineId Id="27" Count="2" />
       <LineId Id="85" Count="0" />
       <LineId Id="89" Count="0" />
@@ -96,9 +98,6 @@ END_CASE]]></ST>
       <LineId Id="90" Count="0" />
       <LineId Id="31" Count="0" />
       <LineId Id="60" Count="0" />
-      <LineId Id="91" Count="1" />
-      <LineId Id="150" Count="2" />
-      <LineId Id="128" Count="0" />
       <LineId Id="126" Count="1" />
       <LineId Id="99" Count="0" />
       <LineId Id="101" Count="0" />
@@ -111,10 +110,13 @@ END_CASE]]></ST>
       <LineId Id="139" Count="0" />
       <LineId Id="146" Count="1" />
       <LineId Id="159" Count="1" />
+      <LineId Id="189" Count="0" />
+      <LineId Id="191" Count="0" />
       <LineId Id="158" Count="0" />
+      <LineId Id="192" Count="2" />
       <LineId Id="62" Count="0" />
       <LineId Id="48" Count="0" />
-      <LineId Id="63" Count="0" />
+      <LineId Id="187" Count="0" />
       <LineId Id="102" Count="0" />
       <LineId Id="37" Count="1" />
       <LineId Id="40" Count="1" />
