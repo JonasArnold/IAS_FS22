@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="Beckhoff Automation GmbH" productName="TwinCAT PLC Control" productVersion="3.5.13.21" creationDateTime="2022-05-16T15:08:28.8825399" />
+  <contentHeader name="PID" modificationDateTime="2022-05-16T15:08:28.8825399">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+    <addData>
+      <data name="http://www.3s-software.com/plcopenxml/projectinformation" handleUnknown="implementation">
+        <ProjectInformation />
+      </data>
+    </addData>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous>
+      <pou name="FB_PT1T2_Process" pouType="functionBlock">
+        <interface>
+          <inputVars>
+            <variable name="u">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Aktuelle Steuergroesse</xhtml>
+              </documentation>
+            </variable>
+            <variable name="Mode">
+              <type>
+                <derived name="E_System_Mode" />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Aktueller Modus</xhtml>
+              </documentation>
+            </variable>
+            <variable name="Param">
+              <type>
+                <derived name="S_PT1T2_Param" />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Parameter vom PT1T2 Modell</xhtml>
+              </documentation>
+            </variable>
+            <variable name="T">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Abtastzeit</xhtml>
+              </documentation>
+            </variable>
+          </inputVars>
+          <outputVars>
+            <variable name="y">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Ausgangsgroesse</xhtml>
+              </documentation>
+            </variable>
+          </outputVars>
+          <localVars>
+            <variable name="a1">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="a2">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="b0">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="b1">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="c1">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="c2">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="y_k_1">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="y_k_2">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="u_k_1">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+            <variable name="u_k_2">
+              <type>
+                <REAL />
+              </type>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml xmlns="http://www.w3.org/1999/xhtml">CASE Mode OF
+	E_System_Mode.System_Init:
+		// calculate coefficients
+		a1 := EXP(-T/Param.T1);
+		a2 := EXP(-T/Param.T2);
+		b0 := (Param.K/(Param.T1-Param.T2))*(Param.T1*(1-a1)-Param.T2*(1-a2));
+		b1 := (Param.K/(Param.T1-Param.T2))*(Param.T2*a1*(1-a2)-Param.T1*a2*(1-a1));;
+		c1 := -(a1 + a2);
+		c2 := a1 * a2;
+		
+	E_System_Mode.System_Run:
+		// implements differencial equation
+		y := b0*u_k_1 + b1*u_k_2 - c1*y_k_1 - c2*y_k_2;
+		
+		// store vars
+		u_k_2 := u_k_1;
+		u_k_1 := u;
+		y_k_2 := y_k_1;
+		y_k_1 := y;
+		
+	ELSE  // default assignment
+	;
+		
+END_CASE</xhtml>
+          </ST>
+        </body>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">FUNCTION_BLOCK FB_PT1T2_Process
+VAR_INPUT
+	u		: REAL;				// Aktuelle Steuergroesse
+	Mode	: E_System_Mode;	// Aktueller Modus
+	Param	: S_PT1T2_Param;	// Parameter vom PT1T2 Modell
+	T		: REAL;				// Abtastzeit
+END_VAR
+VAR_OUTPUT
+	y 		: REAL;				// Ausgangsgroesse
+END_VAR
+VAR
+	a1		: REAL;
+	a2		: REAL;
+	b0 		: REAL;
+	b1		: REAL;
+	c1		: REAL;
+	c2		: REAL;
+	y_k_1	: REAL;
+	y_k_2	: REAL;
+	u_k_1	: REAL;
+	u_k_2	: REAL;
+END_VAR
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>f15ec977-0871-4149-9226-e72fb5f13e74</ObjectId>
+          </data>
+        </addData>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Object Name="FB_PT1T2_Process" ObjectId="f15ec977-0871-4149-9226-e72fb5f13e74" />
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>
