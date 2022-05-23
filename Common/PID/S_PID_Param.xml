@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="Beckhoff Automation GmbH" productName="TwinCAT PLC Control" productVersion="3.5.13.21" creationDateTime="2022-05-17T15:59:35.6785638" />
+  <contentHeader name="PID" modificationDateTime="2022-05-17T15:59:35.6785638">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+    <addData>
+      <data name="http://www.3s-software.com/plcopenxml/projectinformation" handleUnknown="implementation">
+        <ProjectInformation />
+      </data>
+    </addData>
+  </contentHeader>
+  <types>
+    <dataTypes>
+      <dataType name="S_PID_Param">
+        <baseType>
+          <struct>
+            <variable name="Kp">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Reglerverstaerkung</xhtml>
+              </documentation>
+            </variable>
+            <variable name="Ti">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> I Anteil</xhtml>
+              </documentation>
+            </variable>
+            <variable name="Td">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> D Anteil</xhtml>
+              </documentation>
+            </variable>
+            <variable name="N">
+              <type>
+                <UINT />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> D-Anteil Filterung</xhtml>
+              </documentation>
+            </variable>
+            <variable name="Tr">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Weight of Anti reset windup back calculation</xhtml>
+              </documentation>
+            </variable>
+            <variable name="ARW">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Anti reset Windup aktiv</xhtml>
+              </documentation>
+            </variable>
+            <variable name="umin">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Steuergroesse minimaler Wert</xhtml>
+              </documentation>
+            </variable>
+            <variable name="umax">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Steuergroesse maximaler Wert</xhtml>
+              </documentation>
+            </variable>
+          </struct>
+        </baseType>
+        <addData>
+          <data name="http://www.3s-software.com/plcopenxml/interfaceasplaintext" handleUnknown="implementation">
+            <InterfaceAsPlainText>
+              <xhtml xmlns="http://www.w3.org/1999/xhtml">TYPE S_PID_Param :
+STRUCT
+	Kp		: REAL;		// Reglerverstaerkung
+	Ti		: REAL;		// I Anteil
+	Td 		: REAL; 	// D Anteil
+	N		: UINT;		// D-Anteil Filterung
+	Tr		: REAL;		// Weight of Anti reset windup back calculation
+	ARW		: BOOL;		// Anti reset Windup aktiv
+	umin	: REAL;		// Steuergroesse minimaler Wert
+	umax	: REAL;		// Steuergroesse maximaler Wert
+END_STRUCT
+END_TYPE
+</xhtml>
+            </InterfaceAsPlainText>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>bca694e6-0a74-4e25-ae1f-d553a0323457</ObjectId>
+          </data>
+        </addData>
+      </dataType>
+    </dataTypes>
+    <pous />
+  </types>
+  <instances>
+    <configurations />
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Object Name="S_PID_Param" ObjectId="bca694e6-0a74-4e25-ae1f-d553a0323457" />
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>

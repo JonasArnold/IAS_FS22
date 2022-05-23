@@ -75,7 +75,7 @@
           <DataType>REAL32</DataType>
           <DisplayColor>Black</DisplayColor>
           <Enabled>true</Enabled>
-          <FileHandle>1</FileHandle>
+          <FileHandle>0</FileHandle>
           <ForceOversampling>false</ForceOversampling>
           <Guid>80bfb9af-70c8-4f9e-8d34-0ae8f45ff242</Guid>
           <IndexGroup>16448</IndexGroup>
@@ -157,7 +157,7 @@
           <DataType>REAL32</DataType>
           <DisplayColor>Black</DisplayColor>
           <Enabled>true</Enabled>
-          <FileHandle>2</FileHandle>
+          <FileHandle>0</FileHandle>
           <ForceOversampling>false</ForceOversampling>
           <Guid>9b7b1379-1f98-45a7-b641-b6aae7c4ab68</Guid>
           <IndexGroup>16448</IndexGroup>
@@ -239,7 +239,7 @@
           <DataType>REAL32</DataType>
           <DisplayColor>Black</DisplayColor>
           <Enabled>true</Enabled>
-          <FileHandle>3</FileHandle>
+          <FileHandle>0</FileHandle>
           <ForceOversampling>false</ForceOversampling>
           <Guid>bf04569c-ce27-4672-af18-67ef82cc01cc</Guid>
           <IndexGroup>16448</IndexGroup>
@@ -321,11 +321,11 @@
           <DataType>REAL32</DataType>
           <DisplayColor>Black</DisplayColor>
           <Enabled>true</Enabled>
-          <FileHandle>4</FileHandle>
+          <FileHandle>0</FileHandle>
           <ForceOversampling>false</ForceOversampling>
           <Guid>35210b91-2c3b-4ed7-9bd2-01bfb7d250fd</Guid>
           <IndexGroup>16448</IndexGroup>
-          <IndexOffset>454128</IndexOffset>
+          <IndexOffset>403264</IndexOffset>
           <IsFileBased>false</IsFileBased>
           <IsHistorical>false</IsHistorical>
           <Name>e_k</Name>
@@ -403,11 +403,11 @@
           <DataType>REAL32</DataType>
           <DisplayColor>Black</DisplayColor>
           <Enabled>true</Enabled>
-          <FileHandle>5</FileHandle>
+          <FileHandle>0</FileHandle>
           <ForceOversampling>false</ForceOversampling>
           <Guid>5130ffbe-fb7c-4371-9e23-73ba5d1c34d9</Guid>
           <IndexGroup>16448</IndexGroup>
-          <IndexOffset>454136</IndexOffset>
+          <IndexOffset>403272</IndexOffset>
           <IsFileBased>false</IsFileBased>
           <IsHistorical>false</IsHistorical>
           <Name>u_p</Name>
@@ -485,11 +485,11 @@
           <DataType>REAL32</DataType>
           <DisplayColor>Black</DisplayColor>
           <Enabled>true</Enabled>
-          <FileHandle>6</FileHandle>
+          <FileHandle>0</FileHandle>
           <ForceOversampling>false</ForceOversampling>
           <Guid>86afa5f3-a23e-4728-a551-821a18d9ec58</Guid>
           <IndexGroup>16448</IndexGroup>
-          <IndexOffset>454144</IndexOffset>
+          <IndexOffset>403280</IndexOffset>
           <IsFileBased>false</IsFileBased>
           <IsHistorical>false</IsHistorical>
           <Name>u_d</Name>
@@ -567,11 +567,11 @@
           <DataType>REAL32</DataType>
           <DisplayColor>Black</DisplayColor>
           <Enabled>true</Enabled>
-          <FileHandle>7</FileHandle>
+          <FileHandle>0</FileHandle>
           <ForceOversampling>false</ForceOversampling>
           <Guid>cf06e0fa-959d-4cfe-871e-d8318b359e9f</Guid>
           <IndexGroup>16448</IndexGroup>
-          <IndexOffset>454120</IndexOffset>
+          <IndexOffset>403256</IndexOffset>
           <IsFileBased>false</IsFileBased>
           <IsHistorical>false</IsHistorical>
           <Name>u_k (1)</Name>
@@ -649,11 +649,11 @@
           <DataType>REAL32</DataType>
           <DisplayColor>Black</DisplayColor>
           <Enabled>true</Enabled>
-          <FileHandle>8</FileHandle>
+          <FileHandle>0</FileHandle>
           <ForceOversampling>false</ForceOversampling>
           <Guid>8d596e8a-8e2e-4d1c-8899-a908d9bebcdb</Guid>
           <IndexGroup>16448</IndexGroup>
-          <IndexOffset>454124</IndexOffset>
+          <IndexOffset>403260</IndexOffset>
           <IsFileBased>false</IsFileBased>
           <IsHistorical>false</IsHistorical>
           <Name>u_sat</Name>
@@ -731,11 +731,11 @@
           <DataType>REAL32</DataType>
           <DisplayColor>Black</DisplayColor>
           <Enabled>true</Enabled>
-          <FileHandle>9</FileHandle>
+          <FileHandle>0</FileHandle>
           <ForceOversampling>false</ForceOversampling>
           <Guid>2fcd03fd-c085-4d97-96c5-f71c981c4490</Guid>
           <IndexGroup>16448</IndexGroup>
-          <IndexOffset>454072</IndexOffset>
+          <IndexOffset>403208</IndexOffset>
           <IsFileBased>false</IsFileBased>
           <IsHistorical>false</IsHistorical>
           <Name>ref (1)</Name>
@@ -813,11 +813,11 @@
           <DataType>REAL32</DataType>
           <DisplayColor>Black</DisplayColor>
           <Enabled>true</Enabled>
-          <FileHandle>10</FileHandle>
+          <FileHandle>0</FileHandle>
           <ForceOversampling>false</ForceOversampling>
           <Guid>f8c1ee6c-2104-48e6-b427-820102112ba7</Guid>
           <IndexGroup>16448</IndexGroup>
-          <IndexOffset>454076</IndexOffset>
+          <IndexOffset>403212</IndexOffset>
           <IsFileBased>false</IsFileBased>
           <IsHistorical>false</IsHistorical>
           <Name>y</Name>
@@ -895,11 +895,11 @@
           <DataType>REAL32</DataType>
           <DisplayColor>Black</DisplayColor>
           <Enabled>true</Enabled>
-          <FileHandle>11</FileHandle>
+          <FileHandle>0</FileHandle>
           <ForceOversampling>false</ForceOversampling>
           <Guid>bb30e7fc-b02f-4ad3-886a-d7763ba549af</Guid>
           <IndexGroup>16448</IndexGroup>
-          <IndexOffset>454156</IndexOffset>
+          <IndexOffset>403292</IndexOffset>
           <IsFileBased>false</IsFileBased>
           <IsHistorical>false</IsHistorical>
           <Name>u_aw</Name>
@@ -977,11 +977,11 @@
           <DataType>REAL32</DataType>
           <DisplayColor>Black</DisplayColor>
           <Enabled>true</Enabled>
-          <FileHandle>12</FileHandle>
+          <FileHandle>0</FileHandle>
           <ForceOversampling>false</ForceOversampling>
           <Guid>3089d4e4-cc5b-4b5a-9f5d-88d16cefc527</Guid>
           <IndexGroup>16448</IndexGroup>
-          <IndexOffset>454152</IndexOffset>
+          <IndexOffset>403288</IndexOffset>
           <IsFileBased>false</IsFileBased>
           <IsHistorical>false</IsHistorical>
           <Name>u_i_k_1</Name>
