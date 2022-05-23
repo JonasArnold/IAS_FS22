@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_PRBS" Id="{de42c427-50ff-40c7-b0b8-c073549f959c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_PRBS
+VAR_INPUT
+	Mode	: 	E_System_Mode;	// current mode
+	N 		: 	REAL;
+	T 		: 	REAL;
+	t_act	:	REAL;
+	L 		: 	REAL;
+	umin	: 	REAL;
+	umax	: 	REAL;
+END_VAR
+VAR_OUTPUT
+	u 		: 	REAL;
+END_VAR
+VAR
+	reg 	: ARRAY [1..N] OF INT := 1; 
+	k 		: LINT;
+	sum 	: REAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE Mode OF
+	E_System_Mode.System_Init:
+	k := 1;
+	sum := 0;
+		
+	E_System_Mode.System_Run:
+	k := k + 1;
+	
+	CASE n OF
+		2: 	sum := (reg[1]+reg[2]) MOD 2;
+		3:	sum := (reg[2]+reg[3]) MOD 2;
+		4:	sum := (reg[3]+reg[4]) MOD 2;
+		5:	sum := (reg[5]+reg[3]) MOD 2;
+		6:	sum := (reg[5]+reg[6]) MOD 2;
+		7: 	sum := (reg[6]+reg[7]) MOD 2;
+		8:	sum := (reg[4]+reg[5]+reg[6]+reg[8]) MOD 2;
+		9:	sum := (reg[5]+reg[9]) MOD 2;
+		10:	sum := (reg[7]+reg[10]) MOD 2;
+		11:	sum := (reg[9]+reg[11]) MOD 2;
+	END_CASE
+	
+	reg := SHR(reg, SIZEOF(reg));
+	reg[1] = sum;
+		
+	ELSE  // default assignment
+	;
+		
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="FB_PRBS">
+      <LineId Id="26" Count="1" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="102" Count="0" />
+      <LineId Id="38" Count="1" />
+      <LineId Id="80" Count="0" />
+      <LineId Id="82" Count="2" />
+      <LineId Id="87" Count="0" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="95" Count="4" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="74" Count="0" />
+      <LineId Id="114" Count="1" />
+      <LineId Id="75" Count="3" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
