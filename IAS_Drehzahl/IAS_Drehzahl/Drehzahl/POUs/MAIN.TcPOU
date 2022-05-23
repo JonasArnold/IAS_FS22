@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="MAIN" Id="{92c37176-988a-4ad3-8fd4-29743153aa41}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	LastMotorPosition	: 	UINT;
+	Difference			:	INT;
+	DrehzahlRpm			: 	REAL;
+	DrehzahlRps			: 	REAL;
+	OverflowCalculated	: 	BOOL := FALSE;
+	UnderflowCalculated	: 	BOOL := FALSE;
+END_VAR
+VAR CONSTANT
+	cycleTimeS			:	REAL := 0.01;
+	ImpulsePerRevolution: 	UINT := 2048; 
+	uintUpperBound		: 	UINT := 65535;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+// calculate drehzahl
+Difference := UINT_TO_INT(GVL_MOTOR.MotorPosition-LastMotorPosition);
+// handle overflow / underflow
+IF GVL_MOTOR.CounterOverflow AND OverflowCalculated = FALSE THEN
+	OverflowCalculated := TRUE;
+	Difference := UINT_TO_INT((uintUpperBound - LastMotorPosition) + GVL_MOTOR.MotorPosition);
+ELSIF GVL_MOTOR.CounterOverflow = FALSE THEN   // reset flag
+	OverflowCalculated := FALSE;
+END_IF
+IF GVL_MOTOR.CounterUnderflow AND UnderflowCalculated = FALSE THEN
+	UnderflowCalculated := TRUE;
+	Difference := UINT_TO_INT((GVL_MOTOR.MotorPosition - uintUpperBound) - LastMotorPosition);
+ELSIF GVL_MOTOR.CounterUnderflow = FALSE THEN   // reset flag
+	UnderflowCalculated := FALSE;
+END_IF
+
+DrehzahlRps := Difference / (cycleTimeS * ImpulsePerRevolution);
+DrehzahlRpm := DrehzahlRps / 60;
+
+// store values
+LastMotorPosition := GVL_MOTOR.MotorPosition;]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="21" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="2" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="37" Count="1" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="40" Count="1" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="18" Count="2" />
+      <LineId Id="17" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
