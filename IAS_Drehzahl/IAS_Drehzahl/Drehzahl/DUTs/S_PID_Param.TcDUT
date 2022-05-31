@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="S_PID_Param" Id="{bca694e6-0a74-4e25-ae1f-d553a0323457}">
+    <Declaration><![CDATA[TYPE S_PID_Param :
+STRUCT
+	Kp		: REAL;		// Reglerverstaerkung
+	Ti		: REAL;		// I Anteil
+	Td 		: REAL; 	// D Anteil
+	N		: UINT;		// D-Anteil Filterung
+	Tr		: REAL;		// Weight of Anti reset windup back calculation
+	ARW		: BOOL;		// Anti reset Windup aktiv
+	umin	: REAL;		// Steuergroesse minimaler Wert
+	umax	: REAL;		// Steuergroesse maximaler Wert
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

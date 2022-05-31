@@ -2,26 +2,38 @@
   <PropertyGroup>
     <FileVersion>1.0.0.0</FileVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6906fe10-fa99-4f9b-bd44-0e3f49731ca2}</ProjectGuid>
+    <ProjectGuid>{4ec9ed87-d442-4307-aee3-838f07d1f7be}</ProjectGuid>
     <SubObjectsSortedByName>True</SubObjectsSortedByName>
     <DownloadApplicationInfo>true</DownloadApplicationInfo>
     <WriteProductVersion>true</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
     <Name>Drehzahl</Name>
     <ProgramVersion>3.1.4023.0</ProgramVersion>
-    <Application>{222d715e-7fee-4b2f-8079-4de959d4fde9}</Application>
-    <TypeSystem>{463e5eb7-c160-4a5f-9fa7-4c2fef22abe4}</TypeSystem>
-    <Implicit_Task_Info>{65bec764-a6ef-4e05-936e-623ad51a620b}</Implicit_Task_Info>
-    <Implicit_KindOfTask>{d7421536-8944-4de2-a5a6-73d966d7b03e}</Implicit_KindOfTask>
-    <Implicit_Jitter_Distribution>{781ff467-f1f2-4f73-a454-744d0d79aea9}</Implicit_Jitter_Distribution>
-    <LibraryReferences>{254167a8-5dbf-4e3d-8fe3-ab77aff97eec}</LibraryReferences>
+    <Application>{0ac185fe-c593-4c58-b1c0-ca49d5f36486}</Application>
+    <TypeSystem>{0876e125-5f23-4e94-89a1-18a585b03a9d}</TypeSystem>
+    <Implicit_Task_Info>{c776e98c-287a-489f-a065-ec82b9c01f80}</Implicit_Task_Info>
+    <Implicit_KindOfTask>{9426e9fe-a2b2-4374-9618-bb5d18e9c4a1}</Implicit_KindOfTask>
+    <Implicit_Jitter_Distribution>{6a37d584-e680-4053-a7e0-2833ba5538b0}</Implicit_Jitter_Distribution>
+    <LibraryReferences>{cbeba389-44be-4b0d-8c31-149d29ce3ac1}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="GVLs\GVL_MOTOR.TcGVL">
+    <Compile Include="DUTs\E_Controller_Mode.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\E_System_Mode.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\S_PID_Param.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GVLs\GVL_Motor.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="PlcTask.TcTTO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FB_PID_Controller.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
@@ -56,8 +68,8 @@
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-  <Data>
-    <o xml:space="preserve" t="OptionKey">
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{40450F57-0AA3-4216-96F3-5444ECB29763}</v>
@@ -78,13 +90,13 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-  </Data>
-  <TypeList>
-    <Type n="Hashtable">System.Collections.Hashtable</Type>
-    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-    <Type n="String">System.String</Type>
-  </TypeList>
-</XmlArchive>
+        </Data>
+        <TypeList>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
 </Project>

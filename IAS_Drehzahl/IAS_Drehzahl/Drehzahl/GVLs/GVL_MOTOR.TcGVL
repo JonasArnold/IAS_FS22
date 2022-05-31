@@ -1,12 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
-  <GVL Name="GVL_MOTOR" Id="{3813e349-2b99-490f-90a6-462f5b90f310}">
+  <GVL Name="GVL_Motor" Id="{84b815ba-f4a9-4692-940e-12b636029e85}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL
     
 	MotorPosition  		AT %I* : UINT;
 	CounterOverflow 	AT %I* : BOOL;
 	CounterUnderflow 	AT %I* : BOOL;
+	MotorEnable			AT %Q* : BOOL;
+	MotorVelocity 		AT %Q* : INT;
+	
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

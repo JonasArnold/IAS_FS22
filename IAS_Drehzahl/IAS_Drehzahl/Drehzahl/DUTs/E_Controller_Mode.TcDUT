@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_Controller_Mode" Id="{373e1523-a7de-4996-8134-f3257808bcbc}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_Controller_Mode :
+(
+	Controller_Init:= 0,
+	Controller_OpenLoop, 
+	Controller_ClosedLoop
+	
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

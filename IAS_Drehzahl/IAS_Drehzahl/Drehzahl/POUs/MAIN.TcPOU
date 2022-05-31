@@ -1,23 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
-  <POU Name="MAIN" Id="{92c37176-988a-4ad3-8fd4-29743153aa41}" SpecialFunc="None">
+  <POU Name="MAIN" Id="{9429b168-5a2a-4d3c-b652-fc1672261dbb}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
 	LastMotorPosition	: 	UINT;
 	Difference			:	INT;
 	DrehzahlRpm			: 	REAL;
 	DrehzahlRps			: 	REAL;
+	DrehzahlRef			:   REAL;
 	OverflowCalculated	: 	BOOL := FALSE;
 	UnderflowCalculated	: 	BOOL := FALSE;
+	VoltageMotor		:   REAL;
+	ModeController		:   E_Controller_Mode := 0;
+	Mode				:	E_System_Mode;
+	PID					: 	FB_PID_Controller;
+	PID_Param			:   S_PID_Param;
 END_VAR
 VAR CONSTANT
 	cycleTimeS			:	REAL := 0.01;
 	ImpulsePerRevolution: 	UINT := 2048; 
 	uintUpperBound		: 	UINT := 65535;
+	MaxVelocity			: 	INT := 32767;
+	MaxVoltage			:   REAL := 24;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-// calculate drehzahl
+      <ST><![CDATA[// calculate drehzahl
 Difference := UINT_TO_INT(GVL_MOTOR.MotorPosition-LastMotorPosition);
 // handle overflow / underflow
 IF GVL_MOTOR.CounterOverflow AND OverflowCalculated = FALSE THEN
@@ -32,32 +39,72 @@ IF GVL_MOTOR.CounterUnderflow AND UnderflowCalculated = FALSE THEN
 ELSIF GVL_MOTOR.CounterUnderflow = FALSE THEN   // reset flag
 	UnderflowCalculated := FALSE;
 END_IF
-
 DrehzahlRps := Difference / (cycleTimeS * ImpulsePerRevolution);
-DrehzahlRpm := DrehzahlRps / 60;
-
+DrehzahlRpm := DrehzahlRps * 60;
 // store values
-LastMotorPosition := GVL_MOTOR.MotorPosition;]]></ST>
+LastMotorPosition := GVL_MOTOR.MotorPosition;
+
+IF VoltageMotor = 0 THEN
+	GVL_Motor.MotorVelocity := 0;
+ELSE		
+	GVL_Motor.MotorVelocity := REAL_TO_INT(VoltageMotor / MaxVoltage * MaxVelocity);	
+END_IF
+CASE ModeController OF
+	E_Controller_Mode.Controller_Init:
+		PID_Param.Kp 	:= 0.0096;
+		PID_Param.Ti 	:= 0.11;
+		PID_Param.Td 	:= 0.0275;
+		PID_Param.Tr 	:= SQRT(PID_Param.Ti*PID_Param.Td);
+		PID_Param.N  	:= 20;
+		PID_Param.ARW	:= TRUE;
+		PID_Param.umax:= 20;
+		PID_Param.umin:= -20;
+		Mode := E_System_Mode.System_Init;
+		PID(ref:=0, y:=0, Mode := Mode, Param:=PID_Param, T:=cycleTimeS);
+		GVL_MOTOR.MotorEnable := TRUE;
+	;
+	
+	E_Controller_Mode.Controller_OpenLoop:
+
+	;
+	
+	E_Controller_Mode.Controller_ClosedLoop:
+		Mode := E_System_Mode.System_Run;
+		PID(ref:=DrehzahlRef, y:=DrehzahlRpm, Mode := Mode, Param:=PID_Param, T:=cycleTimeS);
+		VoltageMotor := PID.u_sat;
+	;
+	
+END_CASE
+
+
+
+
+]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
-      <LineId Id="21" Count="0" />
-      <LineId Id="13" Count="0" />
-      <LineId Id="2" Count="0" />
-      <LineId Id="30" Count="0" />
-      <LineId Id="24" Count="0" />
-      <LineId Id="34" Count="0" />
-      <LineId Id="25" Count="0" />
-      <LineId Id="37" Count="1" />
-      <LineId Id="42" Count="0" />
-      <LineId Id="28" Count="0" />
-      <LineId Id="35" Count="0" />
-      <LineId Id="29" Count="0" />
-      <LineId Id="40" Count="1" />
-      <LineId Id="26" Count="0" />
-      <LineId Id="36" Count="0" />
-      <LineId Id="14" Count="0" />
-      <LineId Id="18" Count="2" />
-      <LineId Id="17" Count="0" />
+      <LineId Id="222" Count="23" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="111" Count="0" />
+      <LineId Id="114" Count="0" />
+      <LineId Id="246" Count="6" />
+      <LineId Id="259" Count="0" />
+      <LineId Id="253" Count="0" />
+      <LineId Id="221" Count="0" />
+      <LineId Id="112" Count="1" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="59" Count="1" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="261" Count="0" />
+      <LineId Id="62" Count="0" />
+      <LineId Id="257" Count="0" />
+      <LineId Id="63" Count="1" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="196" Count="0" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="43" Count="1" />
+      <LineId Id="40" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

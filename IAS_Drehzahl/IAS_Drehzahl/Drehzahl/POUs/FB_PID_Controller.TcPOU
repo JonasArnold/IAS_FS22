@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_PID_Controller" Id="{0b6540e1-046e-44d5-9cc7-5dce5c9b6f82}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_PID_Controller
+VAR_INPUT
+	ref		: REAL;		// Aktuelle Referenzgroesse (Soll-Groesse)
+	y		: REAL;		// Aktuelle Regelgroesse (Ist-Groesse)
+	Mode	: E_System_Mode; 	// Aktueller Modus
+	Param	: S_PID_Param;		// PID Regler Parameter
+	T		: REAL;				// Abtastzeit
+END_VAR
+VAR_OUTPUT
+	u_k		: REAL; 			// Ausgangsgroesse
+	u_sat	: REAL; 			// Ausgangsgroesse gesaettigt
+END_VAR
+VAR
+	e_k 	: REAL;
+	e_k_1	: REAL;
+	u_p		: REAL;
+	u_d		: REAL;
+	u_d_k_1	: REAL;
+	u_i_k_1	: REAL;
+	u_aw	: REAL;				// anti reset windup back calculation result
+	bi		: REAL;				// calculation parameter for I term
+	bd		: REAL;				// calculation parameter for D term
+	ad		: REAL;				// calculation parameter for D term
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE Mode OF
+	E_System_Mode.System_Init:
+		// calculate coefficients
+		bi := Param.Kp * T / (2*Param.Ti);
+		ad := Param.Td / (Param.Td + Param.N * T);
+		bd := (Param.Kp * Param.N * Param.Td) / (Param.Td + Param.N * T);
+		
+		// reset values
+		u_i_k_1	:= 0;
+		u_d_k_1	:= 0;
+		e_k_1	:= 0;
+		u_aw	:= 0;
+		
+	E_System_Mode.System_Run:
+		// implements differencial equation
+		
+		// compute the error
+		e_k := ref - y;
+		
+		// proportinal term
+		u_p := Param.Kp * e_k;
+		
+		// derivative term with filter
+		u_d	:= ad * u_d_k_1 + bd * (e_k - e_k_1);
+	
+		// total command (u_i from last cycle since it gets calculated later)
+		u_k := u_p + u_i_k_1 + u_d;
+		
+		// saturation
+		u_sat := u_k;
+		IF u_k > Param.umax THEN
+			u_sat := Param.umax;
+		ELSIF u_k < Param.umin THEN
+			u_sat := Param.umin;
+		END_IF
+		
+		// anti reset windup for next loop
+		IF Param.ARW THEN
+			u_aw := (T/Param.Tr) * (u_sat - u_k);
+		ELSE
+			u_aw := 0;
+		END_IF
+		
+		// integral term (Trapezregel)
+		u_i_k_1 := u_i_k_1 + bi * (e_k + e_k_1) + u_aw;
+		
+		// store vars for next step
+		u_d_k_1 := u_d;
+		e_k_1 := e_k;
+		
+	ELSE  // default assignment
+	;
+		
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="FB_PID_Controller">
+      <LineId Id="3" Count="52" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
